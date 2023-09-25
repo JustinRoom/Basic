@@ -5,13 +5,16 @@
 ### framwork
 
 [BaseApplication](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/BaseApplication.java)
+
 [ABaseActivity](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/ABaseActivity.java)
+
 [ABaseFragment](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/ABaseFragment.java)
+
 [ABasePermissionActivity](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/ABasePermissionActivity.java)
 
 ### object
 
-[MessageDispatcher](/basicLibrary/src/main/java/jsc/org/lib/basic/object/event/MessageDispatcher.java)
+[MessageDispatcher](/basicLibrary/src/main/java/jsc/org/lib/basic/object/event/MessageDispatcher.java) 
 [CountDownImpl](/basicLibrary/src/main/java/jsc/org/lib/basic/object/CountDownImpl.java)
 [IdWorker](/basicLibrary/src/main/java/jsc/org/lib/basic/object/IdWorker.java)
 [LocalFileManager](/basicLibrary/src/main/java/jsc/org/lib/basic/object/LocalFileManager.java)
