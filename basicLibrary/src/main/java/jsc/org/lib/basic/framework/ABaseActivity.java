@@ -1,4 +1,4 @@
-package jsc.org.lib.basic.framwork;
+package jsc.org.lib.basic.framework;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -10,7 +10,6 @@ import android.os.Message;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;

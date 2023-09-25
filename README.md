@@ -2,12 +2,13 @@
 
 各种工具封装，目的在于高效开发App。
 
-### framwork
+### framework
 
-[BaseApplication](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/BaseApplication.java)  
-[ABaseActivity](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/ABaseActivity.java)  
-[ABaseFragment](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/ABaseFragment.java)  
-[ABasePermissionActivity](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/ABasePermissionActivity.java)  
+[ABaseActivity](/basicLibrary/src/main/java/jsc/org/lib/basic/framework/ABaseActivity.java)  
+[ABaseFragment](/basicLibrary/src/main/java/jsc/org/lib/basic/framework/ABaseFragment.java)  
+[ABasePermissionActivity](/basicLibrary/src/main/java/jsc/org/lib/basic/framework/ABasePermissionActivity.java)  
+[ABaseViewModule](/basicLibrary/src/main/java/jsc/org/lib/basic/framework/ABaseViewModule.java)  
+[BaseApplication](/basicLibrary/src/main/java/jsc/org/lib/basic/framework/BaseApplication.java)  
 
 ### object
 

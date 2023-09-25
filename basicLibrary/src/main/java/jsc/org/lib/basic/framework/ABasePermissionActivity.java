@@ -1,4 +1,4 @@
-package jsc.org.lib.basic.framwork;
+package jsc.org.lib.basic.framework;
 
 import android.content.pm.PackageManager;
 import android.os.Build;

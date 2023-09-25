@@ -1,4 +1,4 @@
-package jsc.org.lib.basic.framwork;
+package jsc.org.lib.basic.framework;
 
 import android.app.ActivityManager;
 import android.app.Application;

@@ -1,4 +1,4 @@
-package jsc.org.lib.basic.framwork;
+package jsc.org.lib.basic.framework;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -215,7 +215,7 @@ public abstract class ABaseFragment extends Fragment {
         this.onFragmentEventListener = onFragmentEventListener;
     }
 
-    public final void sendEvent(int key, Bundle data) {
+    public final void dispatchEvent(int key, Bundle data) {
         if (onFragmentEventListener != null) {
             onFragmentEventListener.onEvent(key, data);
         }
