@@ -3,12 +3,14 @@
 各种工具封装，目的在于高效开发App。
 
 ### framwork
+
 [BaseApplication](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/BaseApplication.java)
 [ABaseActivity](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/ABaseActivity.java)
 [ABaseFragment](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/ABaseFragment.java)
 [ABasePermissionActivity](/basicLibrary/src/main/java/jsc/org/lib/basic/framwork/ABasePermissionActivity.java)
 
 ### object
+
 [MessageDispatcher](/basicLibrary/src/main/java/jsc/org/lib/basic/object/event/MessageDispatcher.java)
 [CountDownImpl](/basicLibrary/src/main/java/jsc/org/lib/basic/object/CountDownImpl.java)
 [IdWorker](/basicLibrary/src/main/java/jsc/org/lib/basic/object/IdWorker.java)
@@ -24,6 +26,7 @@
 [UpdateTextRunnable](/basicLibrary/src/main/java/jsc/org/lib/basic/object/UpdateTextRunnable.java)
 
 ### utils
+
 [AntiShakeUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AntiShakeUtils.java)
 [AssetsUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AssetsUtils.java)
 [BitmapUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/BitmapUtils.java)
