@@ -24,6 +24,8 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Stack;
 
+import jsc.org.lib.basic.widget.imitate.ImitateDialogManager;
+
 public abstract class ABaseActivity extends AppCompatActivity {
 
     private boolean firstLoad = true;
@@ -89,6 +91,9 @@ public abstract class ABaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (ImitateDialogManager.popup(getClass().getName())) {
+            return;
+        }
         if (!backFragment()) {
             super.onBackPressed();
         }
@@ -175,6 +180,7 @@ public abstract class ABaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         clearCallbacksAndMessages();
+        ImitateDialogManager.clear(getClass().getName());
     }
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>Handler start<<<<<<<<<<<<<<<<<<<<<<<

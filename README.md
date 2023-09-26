@@ -51,3 +51,4 @@
 | 控件 | 文档 |
 |:---|:---|
 |[CustomExpandableDialog](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/dialog/CustomExpandableDialog.java)|[docs](/docs/CustomExpandableDialog.md)|
+|[ImitateLoadingDialog](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/imitate/ImitateLoadingDialog.java)||
