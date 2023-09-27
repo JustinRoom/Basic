@@ -5,6 +5,7 @@ import android.animation.PropertyValuesHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.FrameLayout;
 
 import androidx.annotation.CallSuper;
@@ -61,11 +62,16 @@ public abstract class BaseImitateDialog {
 
     @CallSuper
     public void show() {
+        show(true);
+    }
+
+    @CallSuper
+    public void show(boolean overContent) {
         if (!initialized) {
             initialized = true;
             initContentView(activity.getLayoutInflater(), root);
         }
-        attach();
+        attach(overContent);
         root.setEnabled(cancelable && cancelableTouchOutside);
     }
 
@@ -88,18 +94,33 @@ public abstract class BaseImitateDialog {
         }
     }
 
-    private void attach() {
+    private ViewGroup getParentView(boolean overContent) {
+        ViewGroup parent = activity.findViewById(android.R.id.content);
+        if (!overContent) {
+            //Dialog不会覆盖标题栏
+            return parent;
+        }
+        ViewParent vp = parent.getParent();
+        while (vp != null) {
+            if (vp instanceof FrameLayout) {
+                //Dialog覆盖标题栏
+                return (ViewGroup) vp;
+            }
+            vp = vp.getParent();
+        }
+        return parent;
+    }
+
+    private void attach(boolean overContent) {
         if (root.getParent() == null) {
-            ViewGroup parent = activity.findViewById(android.R.id.content);
-            parent.addView(root, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            getParentView(overContent).addView(root, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             ImitateDialogManager.offer(activity, this);
         }
     }
 
     private boolean detach() {
         if (root.getParent() != null) {
-            ViewGroup parent = activity.findViewById(android.R.id.content);
-            parent.removeView(root);
+            ((ViewGroup) root.getParent()).removeView(root);
             ImitateDialogManager.pop(activity, this);
             return true;
         }
