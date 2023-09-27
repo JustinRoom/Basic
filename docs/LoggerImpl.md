@@ -4,7 +4,14 @@
 
 ```
 public class MainApp extends BaseApplication {
-    ...
+        LoggerImpl.getInstance().init(this, getExternalFilesDir("logs"), false);
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
+                LoggerImpl.getInstance().t(null, e, true);
+            }
+        });
+        ...
 }
 ```
 
