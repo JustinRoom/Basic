@@ -10,7 +10,7 @@ import java.util.Map;
  * SharedPreferences
  * @author jsc
  */
-public class SharePreferenceObj {
+public final class SharePreferenceObj {
 
     private static SharePreferenceObj instance = null;
     private SharedPreferences mSharePreferences;

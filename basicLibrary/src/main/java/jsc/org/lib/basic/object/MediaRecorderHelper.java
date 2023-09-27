@@ -11,7 +11,7 @@ import androidx.annotation.RequiresApi;
 
 import java.io.IOException;
 
-public class MediaRecorderHelper {
+public final class MediaRecorderHelper {
     private static MediaRecorderHelper instance = null;
     private MediaRecorder mRecorder = null;
     private boolean start = false;

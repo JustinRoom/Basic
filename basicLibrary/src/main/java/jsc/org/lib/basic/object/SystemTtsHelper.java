@@ -11,7 +11,7 @@ import java.util.Locale;
 /**
  * 系统自带文字转语音引擎
  */
-public class SystemTtsHelper {
+public final class SystemTtsHelper {
 
     private static SystemTtsHelper instance = null;
     private Context mContext;

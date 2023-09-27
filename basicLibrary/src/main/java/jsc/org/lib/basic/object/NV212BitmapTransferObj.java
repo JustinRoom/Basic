@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 /**
  * 避免临时创建大量的对象（可能会导致OutOfMemoryError）
  */
-public class NV212BitmapTransferObj {
+public final class NV212BitmapTransferObj {
 
     private RenderScript rs = null;
     private ScriptIntrinsicYuvToRGB yuvToRgbIntrinsic = null;

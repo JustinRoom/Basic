@@ -25,7 +25,7 @@ public final class ImitateLoadingDialog extends BaseImitateDialog {
         binding = BaseDialogLoadingBinding.inflate(inflater, root, true);
         ViewUtils.disableCrossClick(binding.getRoot());
         DisplayMetrics metrics = root.getResources().getDisplayMetrics();
-        int size = Math.min(metrics.widthPixels, metrics.heightPixels) / 4;
+        int size = Math.min(metrics.widthPixels, metrics.heightPixels) / 5;
         ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
         params.width = size;
         params.height = size;
