@@ -16,6 +16,7 @@ public abstract class BaseImitateDialog {
 
     private AppCompatActivity activity = null;
     private FrameLayout root = null;
+    private boolean coverTitleBar = true;
     private boolean initialized = false;
     private boolean cancelable = true;
     private boolean cancelableTouchOutside = true;
@@ -34,6 +35,14 @@ public abstract class BaseImitateDialog {
                 cancel();
             }
         });
+    }
+
+    public boolean isCoverTitleBar() {
+        return coverTitleBar;
+    }
+
+    public void setCoverTitleBar(boolean coverTitleBar) {
+        this.coverTitleBar = coverTitleBar;
     }
 
     public final boolean isCancelable() {
@@ -62,16 +71,11 @@ public abstract class BaseImitateDialog {
 
     @CallSuper
     public void show() {
-        show(true);
-    }
-
-    @CallSuper
-    public void show(boolean overContent) {
         if (!initialized) {
             initialized = true;
             initContentView(activity.getLayoutInflater(), root);
         }
-        attach(overContent);
+        attach();
         root.setEnabled(cancelable && cancelableTouchOutside);
     }
 
@@ -94,9 +98,9 @@ public abstract class BaseImitateDialog {
         }
     }
 
-    private ViewGroup getParentView(boolean overContent) {
+    private ViewGroup getParentView() {
         ViewGroup parent = activity.findViewById(android.R.id.content);
-        if (!overContent) {
+        if (!coverTitleBar) {
             //Dialog不会覆盖标题栏
             return parent;
         }
@@ -111,9 +115,9 @@ public abstract class BaseImitateDialog {
         return parent;
     }
 
-    private void attach(boolean overContent) {
+    private void attach() {
         if (root.getParent() == null) {
-            getParentView(overContent).addView(root, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            getParentView().addView(root, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             ImitateDialogManager.offer(activity, this);
         }
     }

@@ -18,7 +18,7 @@ public class MainActivity extends ABaseActivity {
         binding.tvContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoadingDialog(false);
+                showLoadingDialog();
             }
         });
         binding.btnTest.setOnClickListener(new View.OnClickListener() {
@@ -32,14 +32,14 @@ public class MainActivity extends ABaseActivity {
 
     @Override
     public void onLazyLoad() {
-        showLoadingDialog(true);
+        showLoadingDialog();
     }
 
-    private void showLoadingDialog(boolean overContent) {
+    private void showLoadingDialog() {
         ImitateLoadingDialog dialog = new ImitateLoadingDialog(this);
         dialog.setCancelable(true);
         dialog.setCancelableTouchOutside(false);
-        dialog.show(overContent);
+        dialog.show();
     }
 
 }
