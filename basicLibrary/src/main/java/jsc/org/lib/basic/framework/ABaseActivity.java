@@ -180,7 +180,7 @@ public abstract class ABaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         clearCallbacksAndMessages();
-        ImitateDialogManager.clear(getClass().getName());
+        ImitateDialogManager.clear(this);
     }
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>Handler start<<<<<<<<<<<<<<<<<<<<<<<
