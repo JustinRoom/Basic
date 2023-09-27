@@ -1,8 +1,8 @@
 package jsc.org.lib.basic.widget.imitate;
 
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -21,10 +21,10 @@ public final class ImitateLoadingDialog extends BaseImitateDialog {
     }
 
     @Override
-    public void initContentView(@NonNull AppCompatActivity activity) {
-        binding = BaseDialogLoadingBinding.inflate(activity.getLayoutInflater(), activity.findViewById(android.R.id.content), false);
+    public void initContentView(@NonNull LayoutInflater inflater, FrameLayout root) {
+        binding = BaseDialogLoadingBinding.inflate(inflater, root, true);
         ViewUtils.disableCrossClick(binding.getRoot());
-        DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
+        DisplayMetrics metrics = root.getResources().getDisplayMetrics();
         int size = Math.min(metrics.widthPixels, metrics.heightPixels) / 4;
         ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
         params.width = size;
@@ -35,9 +35,6 @@ public final class ImitateLoadingDialog extends BaseImitateDialog {
     @Override
     public void show() {
         super.show();
-        ScaleAnimation inAnim = new ScaleAnimation(.2f, 1.0f, .2f, 1.0f, .5f, .5f);
-        inAnim.setDuration(250);
-        binding.getRoot().setAnimation(inAnim);
-        inAnim.start();
+        runDefaultInAnim(binding.getRoot());
     }
 }

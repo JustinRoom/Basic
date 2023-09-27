@@ -11,7 +11,6 @@ import jsc.org.lib.basic.widget.imitate.ImitateLoadingDialog;
 public class MainActivity extends ABaseActivity {
 
     ActivityMainBinding binding = null;
-    ImitateLoadingDialog dialog = null;
 
     @Override
     public View initContentView() {
@@ -37,11 +36,9 @@ public class MainActivity extends ABaseActivity {
     }
 
     private void showLoadingDialog() {
-        if (dialog == null) {
-            dialog = new ImitateLoadingDialog(this);
-            dialog.setCancelable(true);
-            dialog.setCancelableTouchOutside(true);
-        }
+        ImitateLoadingDialog dialog = new ImitateLoadingDialog(this);
+        dialog.setCancelable(true);
+        dialog.setCancelableTouchOutside(false);
         dialog.show();
     }
 

@@ -91,7 +91,7 @@ public abstract class ABaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (ImitateDialogManager.popup(getClass().getName())) {
+        if (ImitateDialogManager.cancel(this)) {
             return;
         }
         if (!backFragment()) {

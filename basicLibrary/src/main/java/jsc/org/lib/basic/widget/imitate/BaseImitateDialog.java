@@ -1,5 +1,8 @@
 package jsc.org.lib.basic.widget.imitate;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -18,7 +21,7 @@ public abstract class BaseImitateDialog {
     private OnDismissListener onDismissListener = null;
     private OnCanceledListener onCanceledListener = null;
 
-    public abstract void initContentView(@NonNull AppCompatActivity activity);
+    public abstract void initContentView(@NonNull LayoutInflater inflater, FrameLayout root);
 
     public BaseImitateDialog(AppCompatActivity activity) {
         this.activity = activity;
@@ -60,7 +63,7 @@ public abstract class BaseImitateDialog {
     public void show() {
         if (!initialized) {
             initialized = true;
-            initContentView(activity);
+            initContentView(activity.getLayoutInflater(), root);
         }
         attach();
         root.setEnabled(cancelable && cancelableTouchOutside);
@@ -68,7 +71,7 @@ public abstract class BaseImitateDialog {
 
     @CallSuper
     public void dismiss() {
-        detach();
+        if (!detach()) return;
         if (onDismissListener != null) {
             onDismissListener.onDismiss(activity);
         }
@@ -76,9 +79,12 @@ public abstract class BaseImitateDialog {
 
     @CallSuper
     public void cancel() {
-        detach();
+        if (!detach()) return;
         if (onCanceledListener != null) {
             onCanceledListener.onCanceled(activity);
+        }
+        if (onDismissListener != null) {
+            onDismissListener.onDismiss(activity);
         }
     }
 
@@ -86,20 +92,30 @@ public abstract class BaseImitateDialog {
         if (root.getParent() == null) {
             ViewGroup parent = activity.findViewById(android.R.id.content);
             parent.addView(root, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            ImitateDialogManager.offer(activity.getClass().getName(), this);
+            ImitateDialogManager.offer(activity, this);
         }
     }
 
-    private void detach() {
+    private boolean detach() {
         if (root.getParent() != null) {
             ViewGroup parent = activity.findViewById(android.R.id.content);
             parent.removeView(root);
-            ImitateDialogManager.popup(activity.getClass().getName(), this);
+            ImitateDialogManager.pop(activity, this);
+            return true;
         }
+        return false;
     }
 
     public final boolean isShowing() {
         return root.getParent() != null
                 && root.getVisibility() == View.VISIBLE;
+    }
+
+    public final void runDefaultInAnim(View target) {
+        ObjectAnimator.ofPropertyValuesHolder(target,
+                        PropertyValuesHolder.ofFloat(View.SCALE_X, 0.0f, 1.0f, 1.25f, 1.0f),
+                        PropertyValuesHolder.ofFloat(View.SCALE_Y, 0.0f, 1.0f, 1.25f, 1.0f))
+                .setDuration(250L)
+                .start();
     }
 }
