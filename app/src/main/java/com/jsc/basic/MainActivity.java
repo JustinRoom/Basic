@@ -30,7 +30,7 @@ public class MainActivity extends ABaseActivity {
         binding.btnTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "clicked button", Toast.LENGTH_SHORT).show();
+                showToast("clicked button");
             }
         });
         return binding.getRoot();
@@ -52,7 +52,7 @@ public class MainActivity extends ABaseActivity {
     public void onPermissionLaunchBack(String[] unGrantPermissions) {
         super.onPermissionLaunchBack(unGrantPermissions);
         if (unGrantPermissions.length == 0) {
-            Toast.makeText(this, "所有权限已申请允许。", Toast.LENGTH_SHORT).show();
+            showToast("所有权限已申请允许。");
             isExternalStorageManager(true);
         }
     }
