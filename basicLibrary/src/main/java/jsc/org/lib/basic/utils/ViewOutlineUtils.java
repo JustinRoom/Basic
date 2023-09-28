@@ -67,12 +67,12 @@ public final class ViewOutlineUtils {
         view.setClipToOutline(true);
     }
 
-    public static void applyRoundOutline(View view, int dpRadius) {
-        float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpRadius, view.getResources().getDisplayMetrics());
-        applyRoundOutline(view, radius);
+    public static void applyRoundOutline2(View view, float dipRadius) {
+        float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipRadius, view.getResources().getDisplayMetrics());
+        applyRoundOutline1(view, radius);
     }
 
-    public static void applyRoundOutline(View view, final float radius) {
+    public static void applyRoundOutline1(View view, final float radius) {
         view.setOutlineProvider(new RoundViewOutlineProvider(radius));
         view.setClipToOutline(true);
     }
