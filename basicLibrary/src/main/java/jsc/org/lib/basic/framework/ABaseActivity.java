@@ -1,27 +1,39 @@
 package jsc.org.lib.basic.framework;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import jsc.org.lib.basic.widget.imitate.ImitateDialogManager;
@@ -29,12 +41,18 @@ import jsc.org.lib.basic.widget.imitate.ImitateDialogManager;
 public abstract class ABaseActivity extends AppCompatActivity {
 
     private boolean firstLoad = true;
+    private ActivityResultLauncher<String[]> mPermissionLauncher = null;
+    private ActivityResultLauncher<Intent> mExternalStorageManagerLauncher = null;
 
-    protected boolean screenshot() {
+    public boolean registerPermissionLauncher() {
+        return false;
+    }
+
+    public boolean screenshot() {
         return true;
     }
 
-    protected boolean keepScreenOn() {
+    public boolean keepScreenOn() {
         return false;
     }
 
@@ -56,6 +74,28 @@ public abstract class ABaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (registerPermissionLauncher()) {
+            mPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
+                @Override
+                public void onActivityResult(Map<String, Boolean> result) {
+                    List<String> list = new ArrayList<>();
+                    for (String permission : result.keySet()) {
+                        if (Boolean.FALSE.equals(result.get(permission))) {
+                            list.add(permission);
+                        }
+                    }
+                    String[] unGrantPermissions = new String[list.size()];
+                    list.toArray(unGrantPermissions);
+                    onPermissionLaunchBack(unGrantPermissions);
+                }
+            });
+            mExternalStorageManagerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    onExternalStorageManagerLaunchBack(result.getResultCode(), result.getData());
+                }
+            });
+        }
         if (!screenshot()) {//防截屏
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
@@ -254,5 +294,50 @@ public abstract class ABaseActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(txt)) {
             Toast.makeText(getApplicationContext(), txt, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>> about permissions
+    public final void requestPermissions(String[] permissions) {
+        //6.0版本以下不需要动态申请权限
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            onPermissionLaunchBack(new String[]{});
+            return;
+        }
+        List<String> list = new ArrayList<>();
+        for (String perm : permissions) {
+            if (ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED) {
+                list.add(perm);
+            }
+        }
+        if (list.isEmpty()) {
+            onPermissionLaunchBack(new String[]{});
+            return;
+        }
+        String[] unGrantPermissions = new String[list.size()];
+        list.toArray(unGrantPermissions);
+        if (mPermissionLauncher == null)
+            throw new IllegalStateException("Please override method 'registerPermissionLauncher()' for true result.");
+        mPermissionLauncher.launch(unGrantPermissions);
+    }
+
+    public void onPermissionLaunchBack(String[] unGrantPermissions) {
+
+    }
+
+    public final boolean isExternalStorageManager(boolean toSetting) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return true;
+        //Android11及以上版本，申请sdcard读写权限
+        boolean result = Environment.isExternalStorageManager();
+        if (!result && toSetting) {
+            if (mExternalStorageManagerLauncher == null)
+                throw new IllegalStateException("Please override method 'registerPermissionLauncher()' for true result.");
+            //manifest文件中需要申明"android.permission.MANAGE_EXTERNAL_STORAGE"权限
+            mExternalStorageManagerLauncher.launch(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
+        }
+        return result;
+    }
+
+    public void onExternalStorageManagerLaunchBack(int resultCode, @Nullable Intent data) {
+
     }
 }

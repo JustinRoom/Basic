@@ -7,7 +7,6 @@
 |:---|:---|
 |[ABaseActivity](/basicLibrary/src/main/java/jsc/org/lib/basic/framework/ABaseActivity.java)||
 |[ABaseFragment](/basicLibrary/src/main/java/jsc/org/lib/basic/framework/ABaseFragment.java)||
-|[ABasePermissionActivity](/basicLibrary/src/main/java/jsc/org/lib/basic/framework/ABasePermissionActivity.java)||
 |[ABaseViewModule](/basicLibrary/src/main/java/jsc/org/lib/basic/framework/ABaseViewModule.java)||
 |[BaseApplication](/basicLibrary/src/main/java/jsc/org/lib/basic/framework/BaseApplication.java)||
 

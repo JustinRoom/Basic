@@ -1,5 +1,6 @@
 package com.jsc.basic;
 
+import android.Manifest;
 import android.view.View;
 import android.widget.Toast;
 
@@ -11,6 +12,11 @@ import jsc.org.lib.basic.widget.imitate.ImitateLoadingDialog;
 public class MainActivity extends ABaseActivity {
 
     ActivityMainBinding binding = null;
+
+    @Override
+    public boolean registerPermissionLauncher() {
+        return true;
+    }
 
     @Override
     public View initContentView() {
@@ -32,7 +38,7 @@ public class MainActivity extends ABaseActivity {
 
     @Override
     public void onLazyLoad() {
-        showLoadingDialog();
+        requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE});
     }
 
     private void showLoadingDialog() {
@@ -42,4 +48,12 @@ public class MainActivity extends ABaseActivity {
         dialog.show();
     }
 
+    @Override
+    public void onPermissionLaunchBack(String[] unGrantPermissions) {
+        super.onPermissionLaunchBack(unGrantPermissions);
+        if (unGrantPermissions.length == 0) {
+            Toast.makeText(this, "所有权限已申请允许。", Toast.LENGTH_SHORT).show();
+            isExternalStorageManager(true);
+        }
+    }
 }
