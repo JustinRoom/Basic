@@ -12,17 +12,16 @@ import java.util.Map;
  */
 public final class SharePreferenceObj {
 
-    private static SharePreferenceObj instance = null;
+    private static class SingletonHolder {
+        private static final SharePreferenceObj INSTANCE = new SharePreferenceObj();
+    }
     private SharedPreferences mSharePreferences;
 
     private SharePreferenceObj() {
     }
 
     public static SharePreferenceObj getInstance() {
-        if (instance == null) {
-            instance = new SharePreferenceObj();
-        }
-        return instance;
+        return SingletonHolder.INSTANCE;
     }
 
     public void init(Context context, String fileName) {

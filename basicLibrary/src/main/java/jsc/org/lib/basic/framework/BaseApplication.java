@@ -12,7 +12,7 @@ import java.util.List;
 import jsc.org.lib.basic.object.LocalFileManager;
 import jsc.org.lib.basic.object.LoggerImpl;
 import jsc.org.lib.basic.object.SharePreferenceObj;
-import jsc.org.lib.basic.object.ToastImpl;
+import jsc.org.lib.basic.widget.imitate.ImitateToast;
 
 public class BaseApplication extends Application {
 
@@ -27,7 +27,6 @@ public class BaseApplication extends Application {
             }
         });
         SharePreferenceObj.getInstance().init(this, getPackageName() + ".data");
-        ToastImpl.getInstance().init(this);
         LocalFileManager.getInstance().init(this);
     }
 
@@ -35,6 +34,7 @@ public class BaseApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         LoggerImpl.getInstance().unInit();
+        ImitateToast.release();
     }
 
     /**

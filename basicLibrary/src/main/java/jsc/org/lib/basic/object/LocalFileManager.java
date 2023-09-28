@@ -7,19 +7,21 @@ import androidx.annotation.Nullable;
 
 import java.io.File;
 
+import jsc.org.lib.basic.widget.imitate.ImitateToast;
+
 public final class LocalFileManager {
 
-    private static LocalFileManager instance = null;
+    private static class SingletonHolder {
+        private static final LocalFileManager INSTANCE = new LocalFileManager();
+    }
+
     private Context applicationContext;
 
     private LocalFileManager() {
     }
 
     public static LocalFileManager getInstance() {
-        if (instance == null) {
-            instance = new LocalFileManager();
-        }
-        return instance;
+        return SingletonHolder.INSTANCE;
     }
 
     public void init(Context applicationContext) {
