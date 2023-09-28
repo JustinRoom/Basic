@@ -24,7 +24,11 @@ public final class SystemTtsHelper {
 
     public static SystemTtsHelper getInstance() {
         if (instance == null) {
-            instance = new SystemTtsHelper();
+            synchronized (SystemTtsHelper.class) {
+                if (instance == null) {
+                    instance = new SystemTtsHelper();
+                }
+            }
         }
         return instance;
     }
@@ -68,6 +72,7 @@ public final class SystemTtsHelper {
 
     /**
      * 加入队列的待播报文字按顺序播放
+     *
      * @param txt
      */
     public void addSpeak(String txt) {
@@ -78,6 +83,7 @@ public final class SystemTtsHelper {
 
     /**
      * 替换原有文字
+     *
      * @param txt
      */
     public void flushSpeak(String txt) {
