@@ -8,10 +8,12 @@ import com.jsc.basic.databinding.ActivityMainBinding;
 
 import jsc.org.lib.basic.framework.ABaseActivity;
 import jsc.org.lib.basic.widget.imitate.ImitateLoadingDialog;
+import jsc.org.lib.basic.widget.imitate.ImitateToast;
 
 public class MainActivity extends ABaseActivity {
 
     ActivityMainBinding binding = null;
+    int index = 0;
 
     @Override
     public boolean registerPermissionLauncher() {
@@ -30,7 +32,9 @@ public class MainActivity extends ABaseActivity {
         binding.btnTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("clicked button");
+//                showToast("clicked button");
+                index++;
+                ImitateToast.showToast(v.getContext(), "clicked button" + index);
             }
         });
         return binding.getRoot();

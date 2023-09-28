@@ -27,6 +27,11 @@ public final class ViewUtils {
         view.setLayoutParams(params);
     }
 
+    public static int statusBarHeight(@NonNull Resources resources) {
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        return resources.getDimensionPixelSize(resourceId);
+    }
+
     public static int navigationBarHeight(@NonNull Resources resources) {
         int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);

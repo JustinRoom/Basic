@@ -17,4 +17,8 @@
         <item name="android:maxHeight">40dp</item>
     </style>
 
+    <style name="ImitateWindowAnimStyle" mce_bogus="1" parent="android:Animation">
+        <item name="android:windowExitAnimation">@anim/base_anim_fade_out</item>
+    </style>
+
 </resources>
