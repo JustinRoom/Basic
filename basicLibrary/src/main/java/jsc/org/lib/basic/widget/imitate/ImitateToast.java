@@ -27,8 +27,7 @@ public final class ImitateToast {
     private WindowManager mWindowManager = null;
     private TextView mView = null;
     private Timer mTimer = null;
-    private int gravity;
-    private int y;
+    private WindowManager.LayoutParams layoutParams = null;
 
     private ImitateToast() {
 
@@ -54,6 +53,7 @@ public final class ImitateToast {
     private void releaseSource() {
         mView = null;
         mWindowManager = null;
+        layoutParams = null;
     }
 
     private WindowManager.LayoutParams createLayoutParams(int gravity, int y) {
@@ -79,10 +79,12 @@ public final class ImitateToast {
     private void show(String text, int gravity, int y, long time) {
         cancel();
         mView.setText(text);
+        if (layoutParams == null) {
+            layoutParams = createLayoutParams(gravity, y);
+        }
+        boolean isLayoutParamsChanged = needUpdateLayoutParams(gravity, y);
         if (mView.getParent() == null) {
-            this.gravity = gravity;
-            this.y = y;
-            mWindowManager.addView(mView, createLayoutParams(gravity, y));
+            mWindowManager.addView(mView, layoutParams);
             ObjectAnimator.ofPropertyValuesHolder(
                             mView,
                             PropertyValuesHolder.ofFloat(View.ALPHA, .75f, 1.0f),
@@ -90,17 +92,17 @@ public final class ImitateToast {
                             PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0f, 1.2f, 1.0f))
                     .setDuration(250L)
                     .start();
-        } else if (needUpdateLayoutParams(gravity, y)) {
-            mWindowManager.updateViewLayout(mView, createLayoutParams(gravity, y));
+        } else if (isLayoutParamsChanged) {
+            mWindowManager.updateViewLayout(mView, layoutParams);
         }
         schedule(time);
     }
 
     private boolean needUpdateLayoutParams(int gravity, int y) {
-        boolean gravityChanged = this.gravity != gravity;
-        boolean yChanged = this.y != y;
-        this.gravity = gravity;
-        this.y = y;
+        boolean gravityChanged = layoutParams.gravity != gravity;
+        boolean yChanged = layoutParams.y != y;
+        layoutParams.gravity = gravity;
+        layoutParams.y = y;
         return gravityChanged || yChanged;
     }
 
