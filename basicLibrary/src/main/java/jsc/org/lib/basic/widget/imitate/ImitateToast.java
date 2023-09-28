@@ -56,31 +56,26 @@ public final class ImitateToast {
         layoutParams = null;
     }
 
-    private WindowManager.LayoutParams createLayoutParams(int gravity, int y) {
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.format = PixelFormat.TRANSLUCENT;
-        params.windowAnimations = R.style.ImitateWindowAnimStyle;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            params.type = WindowManager.LayoutParams.TYPE_APPLICATION;
-        } else {
-            params.type = WindowManager.LayoutParams.TYPE_TOAST;
-        }
-        params.setTitle("Toast");
-        params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
-        params.gravity = gravity;
-        params.y = y;
-        return params;
-    }
-
     private void show(String text, int gravity, int y, long time) {
         cancel();
         mView.setText(text);
         if (layoutParams == null) {
-            layoutParams = createLayoutParams(gravity, y);
+            layoutParams = new WindowManager.LayoutParams();
+            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            layoutParams.format = PixelFormat.TRANSLUCENT;
+            layoutParams.windowAnimations = R.style.ImitateWindowAnimStyle;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
+            } else {
+                layoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+            }
+            layoutParams.setTitle("Toast");
+            layoutParams.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                    | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+            layoutParams.gravity = gravity;
+            layoutParams.y = y;
         }
         boolean isLayoutParamsChanged = needUpdateLayoutParams(gravity, y);
         if (mView.getParent() == null) {
