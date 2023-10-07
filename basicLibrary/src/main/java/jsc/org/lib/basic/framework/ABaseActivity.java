@@ -43,6 +43,7 @@ public abstract class ABaseActivity extends AppCompatActivity {
     private boolean firstLoad = true;
     private ActivityResultLauncher<String[]> mPermissionLauncher = null;
     private ActivityResultLauncher<Intent> mExternalStorageManagerLauncher = null;
+    private ActivityResultLauncher<Intent> mDrawOverlaysLauncher = null;
 
     public boolean registerPermissionLauncher() {
         return false;
@@ -93,6 +94,12 @@ public abstract class ABaseActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     onExternalStorageManagerLaunchBack(result.getResultCode(), result.getData());
+                }
+            });
+            mDrawOverlaysLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    onDrawOverlaysLaunchBack(result.getResultCode(), result.getData());
                 }
             });
         }
@@ -338,6 +345,23 @@ public abstract class ABaseActivity extends AppCompatActivity {
     }
 
     public void onExternalStorageManagerLaunchBack(int resultCode, @Nullable Intent data) {
+
+    }
+
+    public final boolean canDrawOverlays(boolean toSetting) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return true;
+        //Android6及以上版本，申请悬浮窗权限
+        boolean result = Settings.canDrawOverlays(this);
+        if (!result && toSetting) {
+            if (mDrawOverlaysLauncher == null)
+                throw new IllegalStateException("Please override method 'registerPermissionLauncher()' for true result.");
+            //manifest文件中需要申明"android.permission.SYSTEM_ALERT_WINDOW"权限
+            mDrawOverlaysLauncher.launch(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
+        }
+        return result;
+    }
+
+    public void onDrawOverlaysLaunchBack(int resultCode, @Nullable Intent data) {
 
     }
 }

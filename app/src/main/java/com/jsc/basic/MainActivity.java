@@ -1,12 +1,16 @@
 package com.jsc.basic;
 
 import android.Manifest;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.jsc.basic.databinding.ActivityMainBinding;
 
 import jsc.org.lib.basic.framework.ABaseActivity;
+import jsc.org.lib.basic.object.LoggerImpl;
 import jsc.org.lib.basic.widget.imitate.ImitateLoadingDialog;
 import jsc.org.lib.basic.widget.imitate.ImitateToast;
 
@@ -22,12 +26,12 @@ public class MainActivity extends ABaseActivity {
 
     @Override
     public View initContentView() {
-        ImitateToast.init(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         binding.tvContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoadingDialog();
+//                showLoadingDialog();
+                startActivity(new Intent(v.getContext(), SubActivity.class));
             }
         });
         binding.btnTest.setOnClickListener(new View.OnClickListener() {
@@ -36,6 +40,7 @@ public class MainActivity extends ABaseActivity {
 //                showToast("clicked button");
                 index++;
                 ImitateToast.show("clicked button" + index);
+                LoggerImpl.getInstance().i("ViewClick", index + " clicked the view.", true);
             }
         });
         return binding.getRoot();
@@ -58,7 +63,17 @@ public class MainActivity extends ABaseActivity {
         super.onPermissionLaunchBack(unGrantPermissions);
         if (unGrantPermissions.length == 0) {
             showToast("所有权限已申请允许。");
-            isExternalStorageManager(true);
+            if (isExternalStorageManager(true)) {
+                canDrawOverlays(true);
+            }
+        }
+    }
+
+    @Override
+    public void onExternalStorageManagerLaunchBack(int resultCode, @Nullable Intent data) {
+        super.onExternalStorageManagerLaunchBack(resultCode, data);
+        if (isExternalStorageManager(false)) {
+            canDrawOverlays(true);
         }
     }
 }

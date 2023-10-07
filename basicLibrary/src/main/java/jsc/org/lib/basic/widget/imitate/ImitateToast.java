@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -82,6 +83,7 @@ public final class ImitateToast {
     }
 
     private void releaseSource() {
+        cancel();
         mView = null;
         mWindowManager = null;
         layoutParams = null;
@@ -90,6 +92,8 @@ public final class ImitateToast {
     private void schedule(CharSequence text, int gravity, int x, int y, long time) {
         if (mWindowManager == null)
             throw new IllegalStateException("Please register first.");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(mView.getContext()))
+            throw new IllegalStateException("No permission for Settings.ACTION_MANAGE_OVERLAY_PERMISSION.");
         cancel();
         mView.setText(text);
         if (layoutParams == null) {
@@ -99,14 +103,17 @@ public final class ImitateToast {
             layoutParams.format = PixelFormat.TRANSLUCENT;
             layoutParams.windowAnimations = R.style.ImitateWindowAnimStyle;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
+                layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
             } else {
                 layoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;
             }
             layoutParams.setTitle("Toast");
             layoutParams.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
             layoutParams.gravity = gravity;
             layoutParams.y = y;
         }
