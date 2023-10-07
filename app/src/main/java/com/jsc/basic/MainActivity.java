@@ -1,8 +1,8 @@
 package com.jsc.basic;
 
 import android.Manifest;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.jsc.basic.databinding.ActivityMainBinding;
 
@@ -22,6 +22,7 @@ public class MainActivity extends ABaseActivity {
 
     @Override
     public View initContentView() {
+        ImitateToast.init(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         binding.tvContent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,7 +35,7 @@ public class MainActivity extends ABaseActivity {
             public void onClick(View v) {
 //                showToast("clicked button");
                 index++;
-                ImitateToast.showToast(v.getContext(), "clicked button" + index);
+                ImitateToast.show("clicked button" + index);
             }
         });
         return binding.getRoot();

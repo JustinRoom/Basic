@@ -24,6 +24,37 @@ public final class ImitateToast {
         private static final ImitateToast INSTANCE = new ImitateToast();
     }
 
+    public static class Builder {
+        private int gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+        private int x = 0;
+        private int y = 48;
+        private long time = 2_500L;
+
+        public Builder gravity(int gravity) {
+            this.gravity = gravity;
+            return this;
+        }
+
+        public Builder x(int x) {
+            this.x = x;
+            return this;
+        }
+
+        public Builder y(int y) {
+            this.y = y;
+            return this;
+        }
+
+        public Builder time(long time) {
+            this.time = time;
+            return this;
+        }
+
+        public void show(CharSequence text) {
+            ImitateToast.show(text, gravity, x, y, time);
+        }
+    }
+
     private WindowManager mWindowManager = null;
     private TextView mView = null;
     private Timer mTimer = null;
@@ -56,7 +87,9 @@ public final class ImitateToast {
         layoutParams = null;
     }
 
-    private void show(String text, int gravity, int y, long time) {
+    private void schedule(CharSequence text, int gravity, int x, int y, long time) {
+        if (mWindowManager == null)
+            throw new IllegalStateException("Please register first.");
         cancel();
         mView.setText(text);
         if (layoutParams == null) {
@@ -77,7 +110,7 @@ public final class ImitateToast {
             layoutParams.gravity = gravity;
             layoutParams.y = y;
         }
-        boolean isLayoutParamsChanged = needUpdateLayoutParams(gravity, y);
+        boolean isLayoutParamsChanged = needUpdateLayoutParams(gravity, x, y);
         if (mView.getParent() == null) {
             mWindowManager.addView(mView, layoutParams);
             ObjectAnimator.ofPropertyValuesHolder(
@@ -93,12 +126,14 @@ public final class ImitateToast {
         schedule(time);
     }
 
-    private boolean needUpdateLayoutParams(int gravity, int y) {
+    private boolean needUpdateLayoutParams(int gravity, int x, int y) {
         boolean gravityChanged = layoutParams.gravity != gravity;
+        boolean xChanged = layoutParams.x != x;
         boolean yChanged = layoutParams.y != y;
         layoutParams.gravity = gravity;
+        layoutParams.x = x;
         layoutParams.y = y;
-        return gravityChanged || yChanged;
+        return gravityChanged || xChanged || yChanged;
     }
 
     private void schedule(long time) {
@@ -121,22 +156,20 @@ public final class ImitateToast {
         }
     }
 
-    public static void showToast(Context context, String text) {
-        showToast(context, text, 2_500L);
+    public static void init(Context context) {
+        ImitateToast.getInstance().register(context);
     }
 
-    public static void showToast(Context context, String text, long time) {
-        showToast(context, text, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 48, time);
+    public static void show(CharSequence text) {
+        show(text, 2_500L);
     }
 
-    public static void showToast(Context context, String text, int gravity, int y) {
-        showToast(context, text, gravity, y, 2_500L);
+    public static void show(CharSequence text, long time) {
+        show(text, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 48, time);
     }
 
-    public static void showToast(Context context, String text, int gravity, int y, long time) {
-        ImitateToast instance = ImitateToast.getInstance();
-        instance.register(context);
-        instance.show(text, gravity, y, time);
+    public static void show(CharSequence text, int gravity, int x, int y, long time) {
+        ImitateToast.getInstance().schedule(text, gravity, x, y, time);
     }
 
     public static void release() {
