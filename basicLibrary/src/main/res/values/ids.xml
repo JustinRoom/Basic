@@ -2,5 +2,6 @@
 <resources>
 
     <item name="last_click_time" type="id"/>
+    <item name="base_view_key" type="id"/>
 
 </resources>

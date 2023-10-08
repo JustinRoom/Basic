@@ -11,6 +11,8 @@ import com.jsc.basic.databinding.ActivityMainBinding;
 
 import jsc.org.lib.basic.framework.ABaseActivity;
 import jsc.org.lib.basic.object.LoggerImpl;
+import jsc.org.lib.basic.utils.ItemBackgroundUtils;
+import jsc.org.lib.basic.widget.CustomTitleBar;
 import jsc.org.lib.basic.widget.imitate.ImitateLoadingDialog;
 import jsc.org.lib.basic.widget.imitate.ImitateToast;
 
@@ -27,6 +29,14 @@ public class MainActivity extends ABaseActivity {
     @Override
     public View initContentView() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding.titleBar.setTitle("主页");
+        ItemBackgroundUtils.applyItemBackgroundBorderlessRipple(binding.titleBar.findChildByKey(CustomTitleBar.BACK_CONTAINER));
+        binding.titleBar.findChildByKey(CustomTitleBar.BACK_CONTAINER).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         binding.tvContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

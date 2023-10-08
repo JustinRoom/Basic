@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ProportionallyFillableGridLayout">
+        <attr name="fglRowCount" format="integer" />
+        <attr name="fglColumnCount" format="integer" />
+        <attr name="fglRowSpace" format="dimension" />
+        <attr name="fglColumnSpace" format="dimension" />
+        <!--for example:"w,3:4"-->
+        <!--base on with, width:height=3:4-->
+        <attr name="fglItemRatio" format="string" />
+        <attr name="fglCenterHorizontal" format="boolean" />
+        <attr name="fglCenterVertical" format="boolean" />
+    </declare-styleable>
+
+</resources>
