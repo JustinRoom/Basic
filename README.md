@@ -32,6 +32,7 @@
 |[AntiShakeUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AntiShakeUtils.java)||
 |[AssetsUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AssetsUtils.java)||
 |[BitmapUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/BitmapUtils.java)||
+|[FloatNumberUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/FloatNumberUtils.java)||
 |[HtmlUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/HtmlUtils.java)||
 |[ImageReaderUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/ImageReaderUtils.java)||
 |[ItemBackgroundUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/ItemBackgroundUtils.java)||
