@@ -15,11 +15,7 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public final class LoggerImpl {
@@ -30,7 +26,7 @@ public final class LoggerImpl {
 
     private final Object lock = new Object();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("", Locale.US);
-    private SharedPreferences preferences = null;
+    private SharedPreferences mPreferences = null;
     private FileWriter mFileWriter = null;
     private boolean initialized = false;
     private boolean isDebugModel;
@@ -63,11 +59,11 @@ public final class LoggerImpl {
             }
             rootPath = folder.getPath();
             try {
-                preferences = context.getSharedPreferences("logger.data", Context.MODE_PRIVATE);
+                mPreferences = context.getSharedPreferences("logger.data", Context.MODE_PRIVATE);
                 PackageManager packageManager = context.getPackageManager();
                 PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
                 versionInfo = packInfo.versionName + "  " + packInfo.versionCode;
-                lastDateStr = preferences.getString("lastDateStr", "");
+                lastDateStr = mPreferences.getString("lastDateStr", "");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -94,11 +90,15 @@ public final class LoggerImpl {
     }
 
     /**
-     * Delete all log files, but except "deviceInfo.txt".
+     * Delete all log files.
      */
     public void clearLogs() {
         try {
             closeFileWriter();
+            lastDateStr = "";
+            if (mPreferences != null) {
+                mPreferences.edit().putString(lastDateStr, "").apply();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -113,7 +113,54 @@ public final class LoggerImpl {
                 boolean dr = f.delete();
             }
         }
-        newLogFile(null);
+    }
+
+    public void v(String content) {
+        v(null, content);
+    }
+
+    public void d(String content) {
+        d(null, content);
+    }
+
+    public void i(String content) {
+        i(null, content);
+    }
+
+    public void w(String content) {
+        w(null, content);
+    }
+
+    public void e(String content) {
+        e(null, content);
+    }
+
+    public void t(Throwable th) {
+        t(null, th);
+    }
+
+    public void v(String tag, String content) {
+        v(tag, content, true);
+    }
+
+    public void d(String tag, String content) {
+        d(tag, content, true);
+    }
+
+    public void i(String tag, String content) {
+        i(tag, content, true);
+    }
+
+    public void w(String tag, String content) {
+        w(tag, content, true);
+    }
+
+    public void e(String tag, String content) {
+        e(tag, content, true);
+    }
+
+    public void t(String tag, Throwable th) {
+        t(tag, th, true);
     }
 
     public void v(String tag, String content, boolean saveToLocal) {
@@ -235,80 +282,35 @@ public final class LoggerImpl {
             builder.append("\n")
                     .append("Date:").append(curDateStr).append("\n")
                     .append("Vers:").append(versionInfo).append("\n");
-            if (preferences != null) {
-                preferences.edit().putString("lastDateStr", lastDateStr).apply();
-            }
-        }
-    }
-
-    private void writeDeviceInfoIfNecessary() {
-        File file = new File(getDirectory(), "deviceInfo.txt");
-        if (!file.exists()) {
-            try {
-                boolean cr = file.createNewFile();
-                FileWriter writer = new FileWriter(file, false);
-                writer.write(getDeviceInfo());
-                writer.flush();
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (mPreferences != null) {
+                mPreferences.edit().putString("lastDateStr", lastDateStr).apply();
             }
         }
     }
 
     private void initCurLogFile() {
-        File[] files = new File(rootPath).listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.startsWith("log");
-            }
-        });
-        if (files == null || files.length == 0) {
-            newLogFile(null);
-            return;
-        }
-        File file = null;
-        if (files.length == 1) {
-            file = files[0];
-        } else {
-            List<File> list = Arrays.asList(files);
-            Collections.sort(list, new Comparator<File>() {
-                @Override
-                public int compare(File o1, File o2) {
-                    //file 1
-                    String fileName1 = o1.getName().replace(".txt", "");
-                    fileName1 = fileName1.replace("log", "");
-                    int val1 = Integer.parseInt(fileName1);
-                    //file 2
-                    String fileName2 = o2.getName().replace(".txt", "");
-                    fileName2 = fileName2.replace("log", "");
-                    int val2 = Integer.parseInt(fileName2);
-                    return val1 - val2;
-                }
-            });
-            file = list.get(list.size() - 1);
-        }
-        if (file.length() >= mMaxFileSize) {
-            //new file
-            newLogFile(file);
-        } else {
-            mLogFile = file;
-        }
-    }
-
-    private void newLogFile(File curFile) {
-        int val = 0;
-        if (curFile != null) {
-            String fileName = curFile.getName().replace(".txt", "");
-            fileName = fileName.replace("log", "");
-            val = Integer.parseInt(fileName) + 1;
-        }
-        String newFileName = "log" + val + ".txt";
         try {
             closeFileWriter();
-            lastDateStr = "";
-            mLogFile = new File(rootPath, newFileName);
-            boolean cr = mLogFile.createNewFile();
+            String date = new SimpleDateFormat("yyyyMMdd", Locale.US).format(new Date());
+            int index = -1;
+            while (true) {
+                index++;
+                mLogFile = new File(rootPath, String.format(Locale.US, "%s_%03d.txt", date, index));
+                if (!mLogFile.exists()) {
+                    break;
+                }
+                if (mLogFile.length() < mMaxFileSize) {
+                    break;
+                }
+            }
+            if (!mLogFile.exists()) {
+                //create an new file. 创建一个新文件
+                lastDateStr = "";
+                if (mPreferences != null) {
+                    mPreferences.edit().putString(lastDateStr, "").apply();
+                }
+                boolean cr = mLogFile.createNewFile();
+            }
             writeHeaderInfo();
         } catch (IOException e) {
             e.printStackTrace();
@@ -338,7 +340,7 @@ public final class LoggerImpl {
             mFileWriter.write(content);
             mFileWriter.flush();
             if (mLogFile.length() >= mMaxFileSize) {
-                newLogFile(mLogFile);
+                initCurLogFile();
             }
         } catch (IOException e) {
             e.printStackTrace();
