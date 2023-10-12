@@ -1,6 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+# CircularProgressView
 
+#### 1.1、示例效果
+![CircularProgressView](CircularProgressView.png)
+
+#### 1.2、属性说明
+```
     <declare-styleable name="CircularProgressView">
         <!--圆弧进度角度-->
         <attr name="cpvSweepAngle" format="float" />
@@ -36,17 +40,26 @@
         <!--进度圆形线宽-->
         <attr name="cpvProgressStrokeWidth" format="dimension" />
     </declare-styleable>
+```
 
-    <declare-styleable name="ProportionallyFillableGridLayout">
-        <attr name="fglRowCount" format="integer" />
-        <attr name="fglColumnCount" format="integer" />
-        <attr name="fglRowSpace" format="dimension" />
-        <attr name="fglColumnSpace" format="dimension" />
-        <!--for example:"w,3:4"-->
-        <!--base on with, width:height=3:4-->
-        <attr name="fglItemRatio" format="string" />
-        <attr name="fglCenterHorizontal" format="boolean" />
-        <attr name="fglCenterVertical" format="boolean" />
-    </declare-styleable>
+#### 1.3、在xml布局文件添加
+```
+    <jsc.org.lib.basic.widget.CircularProgressView
+        android:id="@+id/cpv_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cpv2RadiusBaseOn="width"
+        app:cpv2RadiusPercent=".6"
+        app:cpvBackgroundColor="#80333333"
+        app:cpvProgressEndColor="#0000FF"
+        app:cpvProgressStartColor="#FF0000" />
+       
+```
 
-</resources>
+#### 1.4、进度动画
+```
+CircularProgressView progressView;
+
+progressView.sweepAngle(245, 1_500);
+
+```

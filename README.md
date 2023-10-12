@@ -52,6 +52,7 @@
 |[CustomExpandableDialog](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/dialog/CustomExpandableDialog.java)|[docs](/docs/CustomExpandableDialog.md)|
 |[ImitateLoadingDialog](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/imitate/ImitateLoadingDialog.java)||
 |[ImitateToast](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/imitate/ImitateToast.java)|[docs](/docs/ImitateToast.md)|
+|[CircularProgressView](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/CircularProgressView.java)|[docs](/docs/CircularProgressView.md)|
 |[CollapsibleFlowLayout](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/CollapsibleFlowLayout.java)||
 |[CustomTitleBar](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/CustomTitleBar.java)||
 |[ProportionallyFillableGridLayout](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/ProportionallyFillableGridLayout.java)||

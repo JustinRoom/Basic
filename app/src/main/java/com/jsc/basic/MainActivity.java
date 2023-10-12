@@ -40,14 +40,18 @@ public class MainActivity extends ABaseActivity {
         binding.tvContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                showLoadingDialog();
+                showLoadingDialog();
+            }
+        });
+        binding.btnSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 startActivity(new Intent(v.getContext(), SubActivity.class));
             }
         });
         binding.btnTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                showToast("clicked button");
                 index++;
                 ImitateToast.show("clicked button" + index);
                 LoggerImpl.getInstance().i("ViewClick", index + " clicked the view.", true);
