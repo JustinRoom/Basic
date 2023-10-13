@@ -8,7 +8,7 @@ public class MainApp extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         ...
-        ImitateToast.init(this);
+        ImitateToast.init(this, null);
     }
         
     @Override

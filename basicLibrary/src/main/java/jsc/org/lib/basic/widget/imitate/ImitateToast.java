@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,7 +42,7 @@ public final class ImitateToast {
         return SingletonHolder.INSTANCE;
     }
 
-    private void register(Context context, int gravity, int x, int y) {
+    private void register(Context context, int gravity, int x, int y, OnViewInitializeListener listener) {
         if (mWindowManager == null) {
             mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
@@ -52,7 +54,13 @@ public final class ImitateToast {
             mView.setTextColor(Color.WHITE);
             mView.setBackgroundColor(0xBF000000);
             mView.setPadding(padding, padding / 3, padding, padding / 3);
+            mView.setMinWidth(context.getResources().getDisplayMetrics().widthPixels / 4);
+            mView.setMaxWidth(context.getResources().getDisplayMetrics().widthPixels * 4 / 5);
+            mView.setMaxLines(32);
             ViewOutlineUtils.applyHorizontalEllipticOutline(mView);
+            if (listener != null) {
+                listener.onViewInitialize(mView);
+            }
         }
     }
 
@@ -166,12 +174,12 @@ public final class ImitateToast {
         }
     }
 
-    public static void init(Context context) {
-        init(context, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 48);
+    public static void init(Context context, OnViewInitializeListener listener) {
+        init(context, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 48, listener);
     }
 
-    public static void init(Context context, int gravity, int x, int y) {
-        ImitateToast.getInstance().register(context, gravity, x, y);
+    public static void init(Context context, int gravity, int x, int y, OnViewInitializeListener listener) {
+        ImitateToast.getInstance().register(context, gravity, x, y, listener);
     }
 
     public static void show(CharSequence text) {
@@ -192,5 +200,9 @@ public final class ImitateToast {
 
     public static void unInit() {
         ImitateToast.getInstance().unregister();
+    }
+
+    public interface OnViewInitializeListener {
+        void onViewInitialize(@NonNull TextView view);
     }
 }

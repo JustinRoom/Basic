@@ -12,6 +12,7 @@ import com.jsc.basic.databinding.ActivityMainBinding;
 import jsc.org.lib.basic.framework.ABaseActivity;
 import jsc.org.lib.basic.object.LoggerImpl;
 import jsc.org.lib.basic.utils.ItemBackgroundUtils;
+import jsc.org.lib.basic.utils.ViewUtils;
 import jsc.org.lib.basic.widget.CustomTitleBar;
 import jsc.org.lib.basic.widget.imitate.ImitateLoadingDialog;
 import jsc.org.lib.basic.widget.imitate.ImitateToast;
@@ -22,7 +23,13 @@ public class MainActivity extends ABaseActivity {
     int index = 0;
 
     @Override
+    public boolean enableActionBar() {
+        return false;
+    }
+
+    @Override
     public View initContentView() {
+        ImitateToast.init(this, null);
         registerPermissionLauncher();
         registerExternalStorageManagerLauncher();
         registerDrawOverlaysLauncher();
@@ -39,7 +46,7 @@ public class MainActivity extends ABaseActivity {
         binding.tvContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImitateToast.show("Loading...", Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 56);
+                ImitateToast.show("Loading...", Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, getContentViewTop() + ViewUtils.statusBarHeight(getResources()) + 12);
                 showLoadingDialog();
             }
         });
@@ -63,6 +70,12 @@ public class MainActivity extends ABaseActivity {
     @Override
     public void onLazyLoad() {
         requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE});
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImitateToast.unInit();
     }
 
     private void showLoadingDialog() {

@@ -28,7 +28,6 @@ public class BaseApplication extends Application {
         });
         SharePreferenceObj.getInstance().init(this, getPackageName() + ".data");
         LocalFileManager.getInstance().init(this);
-        ImitateToast.init(this);
     }
 
     @Override

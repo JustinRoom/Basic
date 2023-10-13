@@ -45,11 +45,15 @@ public abstract class ABaseActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> mExternalStorageManagerLauncher = null;
     private ActivityResultLauncher<Intent> mDrawOverlaysLauncher = null;
 
-    public boolean screenshot() {
+    public boolean enableActionBar() {
         return true;
     }
 
-    public boolean keepScreenOn() {
+    public boolean enableScreenshot() {
+        return true;
+    }
+
+    public boolean enableKeepScreenOn() {
         return false;
     }
 
@@ -71,10 +75,15 @@ public abstract class ABaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!screenshot()) {//防截屏
+        if (!enableActionBar()) {//无标题栏
+            if (getSupportActionBar() != null){
+                getSupportActionBar().hide();
+            }
+        }
+        if (!enableScreenshot()) {//防截屏
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
-        if (keepScreenOn()) {//防息屏
+        if (enableKeepScreenOn()) {//防息屏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
         View view = initContentView();
@@ -312,7 +321,16 @@ public abstract class ABaseActivity extends AppCompatActivity {
         }
     }
 
+    public final int getContentViewTop() {
+        return getWindow().findViewById(getWindowContentId()).getTop();
+    }
+
     //>>>>>>>>>>>>>>>>>>>>>>>>>>> about permissions
+
+    /**
+     * @see #registerPermissionLauncher()
+     * @param permissions the permissions to be requested
+     */
     public final void requestPermissions(String[] permissions) {
         //6.0版本以下不需要动态申请权限
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -340,6 +358,11 @@ public abstract class ABaseActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * @see #registerExternalStorageManagerLauncher()
+     * @param toSetting to system setting activity
+     * @return true or false.
+     */
     public final boolean isExternalStorageManager(boolean toSetting) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return true;
         //Android11及以上版本，申请sdcard读写权限
@@ -357,6 +380,11 @@ public abstract class ABaseActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * @see #registerDrawOverlaysLauncher()
+     * @param toSetting to system setting activity
+     * @return true or false.
+     */
     public final boolean canDrawOverlays(boolean toSetting) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return true;
         //Android6及以上版本，申请悬浮窗权限
