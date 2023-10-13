@@ -45,10 +45,6 @@ public abstract class ABaseActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> mExternalStorageManagerLauncher = null;
     private ActivityResultLauncher<Intent> mDrawOverlaysLauncher = null;
 
-    public boolean registerPermissionLauncher() {
-        return false;
-    }
-
     public boolean screenshot() {
         return true;
     }
@@ -75,7 +71,20 @@ public abstract class ABaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (registerPermissionLauncher()) {
+        if (!screenshot()) {//防截屏
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+        if (keepScreenOn()) {//防息屏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        View view = initContentView();
+        if (view != null) {
+            setContentView(view);
+        }
+    }
+
+    public final void registerPermissionLauncher() {
+        if (mPermissionLauncher == null) {
             mPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
                 @Override
                 public void onActivityResult(Map<String, Boolean> result) {
@@ -90,28 +99,28 @@ public abstract class ABaseActivity extends AppCompatActivity {
                     onPermissionLaunchBack(unGrantPermissions);
                 }
             });
+        }
+    }
+
+    public final void registerExternalStorageManagerLauncher() {
+        if (mExternalStorageManagerLauncher == null) {
             mExternalStorageManagerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     onExternalStorageManagerLaunchBack(result.getResultCode(), result.getData());
                 }
             });
+        }
+    }
+
+    public final void registerDrawOverlaysLauncher() {
+        if (mDrawOverlaysLauncher == null) {
             mDrawOverlaysLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     onDrawOverlaysLaunchBack(result.getResultCode(), result.getData());
                 }
             });
-        }
-        if (!screenshot()) {//防截屏
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        }
-        if (keepScreenOn()) {//防息屏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-        View view = initContentView();
-        if (view != null) {
-            setContentView(view);
         }
     }
 

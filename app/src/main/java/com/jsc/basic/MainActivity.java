@@ -22,12 +22,11 @@ public class MainActivity extends ABaseActivity {
     int index = 0;
 
     @Override
-    public boolean registerPermissionLauncher() {
-        return true;
-    }
-
-    @Override
     public View initContentView() {
+        registerPermissionLauncher();
+        registerExternalStorageManagerLauncher();
+        registerDrawOverlaysLauncher();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         binding.titleBar.setTitle("主页");
         ItemBackgroundUtils.applyItemBackgroundBorderlessRipple(binding.titleBar.findChildByKey(CustomTitleBar.BACK_CONTAINER));
@@ -40,6 +39,7 @@ public class MainActivity extends ABaseActivity {
         binding.tvContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ImitateToast.show("Loading...", Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 56);
                 showLoadingDialog();
             }
         });

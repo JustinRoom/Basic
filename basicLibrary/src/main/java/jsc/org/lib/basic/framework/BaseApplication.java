@@ -35,7 +35,7 @@ public class BaseApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         LoggerImpl.getInstance().unInit();
-        ImitateToast.release();
+        ImitateToast.unInit();
     }
 
     /**

@@ -25,41 +25,12 @@ public final class ImitateToast {
         private static final ImitateToast INSTANCE = new ImitateToast();
     }
 
-    public static class Builder {
-        private int gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
-        private int x = 0;
-        private int y = 48;
-        private long time = 2_500L;
-
-        public Builder gravity(int gravity) {
-            this.gravity = gravity;
-            return this;
-        }
-
-        public Builder x(int x) {
-            this.x = x;
-            return this;
-        }
-
-        public Builder y(int y) {
-            this.y = y;
-            return this;
-        }
-
-        public Builder time(long time) {
-            this.time = time;
-            return this;
-        }
-
-        public void show(CharSequence text) {
-            ImitateToast.show(text, gravity, x, y, time);
-        }
-    }
-
     private WindowManager mWindowManager = null;
     private TextView mView = null;
     private Timer mTimer = null;
-    private WindowManager.LayoutParams layoutParams = null;
+    private WindowManager.LayoutParams mDefaultLayoutParams = null;
+    private WindowManager.LayoutParams mCustomLayoutParams = null;
+    private int mLayoutParamsModel = 0;//0 default, 1 custom
 
     private ImitateToast() {
 
@@ -69,9 +40,12 @@ public final class ImitateToast {
         return SingletonHolder.INSTANCE;
     }
 
-    private void register(Context context) {
+    private void register(Context context, int gravity, int x, int y) {
         if (mWindowManager == null) {
             mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+            mDefaultLayoutParams = createLayoutParams(gravity, x, y);
+            mCustomLayoutParams = createLayoutParams(gravity, x, y);
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, context.getResources().getDisplayMetrics());
             mView = new TextView(context.getApplicationContext());
             mView.setGravity(Gravity.CENTER);
@@ -82,44 +56,48 @@ public final class ImitateToast {
         }
     }
 
-    private void releaseSource() {
-        cancel();
-        mView = null;
-        mWindowManager = null;
-        layoutParams = null;
+    private WindowManager.LayoutParams createLayoutParams(int gravity, int x, int y) {
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.format = PixelFormat.TRANSLUCENT;
+        params.windowAnimations = R.style.ImitateWindowAnimStyle;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        }
+        params.setTitle("Toast");
+        params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        params.gravity = gravity;
+        params.x = x;
+        params.y = y;
+        return params;
     }
 
-    private void schedule(CharSequence text, int gravity, int x, int y, long time) {
+    private void unregister() {
+        cancelDisappear(true);
+        mView = null;
+        mWindowManager = null;
+        mDefaultLayoutParams = null;
+        mCustomLayoutParams = null;
+    }
+
+    private void showTextInDefaultModel(CharSequence text, long delay) {
         if (mWindowManager == null)
             throw new IllegalStateException("Please register first.");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(mView.getContext()))
             throw new IllegalStateException("No permission for Settings.ACTION_MANAGE_OVERLAY_PERMISSION.");
-        cancel();
+        cancelDisappear(mLayoutParamsModel == 1);
         mView.setText(text);
-        if (layoutParams == null) {
-            layoutParams = new WindowManager.LayoutParams();
-            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-            layoutParams.format = PixelFormat.TRANSLUCENT;
-            layoutParams.windowAnimations = R.style.ImitateWindowAnimStyle;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-            } else {
-                layoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;
-            }
-            layoutParams.setTitle("Toast");
-            layoutParams.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                    | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-            layoutParams.gravity = gravity;
-            layoutParams.y = y;
-        }
-        boolean isLayoutParamsChanged = needUpdateLayoutParams(gravity, x, y);
         if (mView.getParent() == null) {
-            mWindowManager.addView(mView, layoutParams);
+            mWindowManager.addView(mView, mDefaultLayoutParams);
+            mLayoutParamsModel = 0;
             ObjectAnimator.ofPropertyValuesHolder(
                             mView,
                             PropertyValuesHolder.ofFloat(View.ALPHA, .75f, 1.0f),
@@ -127,23 +105,43 @@ public final class ImitateToast {
                             PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0f, 1.2f, 1.0f))
                     .setDuration(250L)
                     .start();
-        } else if (isLayoutParamsChanged) {
-            mWindowManager.updateViewLayout(mView, layoutParams);
         }
-        schedule(time);
+        scheduleDisappear(delay);
     }
 
-    private boolean needUpdateLayoutParams(int gravity, int x, int y) {
-        boolean gravityChanged = layoutParams.gravity != gravity;
-        boolean xChanged = layoutParams.x != x;
-        boolean yChanged = layoutParams.y != y;
-        layoutParams.gravity = gravity;
-        layoutParams.x = x;
-        layoutParams.y = y;
-        return gravityChanged || xChanged || yChanged;
+    private void showTextInCustomModel(CharSequence text, int gravity, int x, int y, long delay) {
+        if (mWindowManager == null)
+            throw new IllegalStateException("Please register first.");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(mView.getContext()))
+            throw new IllegalStateException("No permission for Settings.ACTION_MANAGE_OVERLAY_PERMISSION.");
+        cancelDisappear(mLayoutParamsModel == 0);
+        mView.setText(text);
+        boolean gravityChanged = mCustomLayoutParams.gravity != gravity;
+        boolean xChanged = mCustomLayoutParams.x != x;
+        boolean yChanged = mCustomLayoutParams.y != y;
+        boolean changed = gravityChanged || xChanged || yChanged;
+        if (changed) {
+            mCustomLayoutParams.gravity = gravity;
+            mCustomLayoutParams.x = x;
+            mCustomLayoutParams.y = y;
+        }
+        if (mView.getParent() == null) {
+            mWindowManager.addView(mView, mCustomLayoutParams);
+            mLayoutParamsModel = 1;
+            ObjectAnimator.ofPropertyValuesHolder(
+                            mView,
+                            PropertyValuesHolder.ofFloat(View.ALPHA, .75f, 1.0f),
+                            PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0f, 1.2f, 1.0f),
+                            PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0f, 1.2f, 1.0f))
+                    .setDuration(250L)
+                    .start();
+        } else if (changed) {
+            mWindowManager.updateViewLayout(mView, mCustomLayoutParams);
+        }
+        scheduleDisappear(delay);
     }
 
-    private void schedule(long time) {
+    private void scheduleDisappear(long delay) {
         if (mTimer == null) {
             mTimer = new Timer();
             mTimer.schedule(new TimerTask() {
@@ -152,19 +150,28 @@ public final class ImitateToast {
                     mWindowManager.removeView(mView);
                     mTimer = null;
                 }
-            }, time);
+            }, delay);
         }
     }
 
-    private void cancel() {
+    private void cancelDisappear(boolean detach) {
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
         }
+        if (detach && mWindowManager != null
+                && mView != null
+                && mView.getParent() != null) {
+            mWindowManager.removeView(mView);
+        }
     }
 
     public static void init(Context context) {
-        ImitateToast.getInstance().register(context);
+        init(context, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 48);
+    }
+
+    public static void init(Context context, int gravity, int x, int y) {
+        ImitateToast.getInstance().register(context, gravity, x, y);
     }
 
     public static void show(CharSequence text) {
@@ -172,14 +179,18 @@ public final class ImitateToast {
     }
 
     public static void show(CharSequence text, long time) {
-        show(text, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 48, time);
+        ImitateToast.getInstance().showTextInDefaultModel(text, time);
+    }
+
+    public static void show(CharSequence text, int gravity, int x, int y) {
+        show(text, gravity, x, y, 2_500L);
     }
 
     public static void show(CharSequence text, int gravity, int x, int y, long time) {
-        ImitateToast.getInstance().schedule(text, gravity, x, y, time);
+        ImitateToast.getInstance().showTextInCustomModel(text, gravity, x, y, time);
     }
 
-    public static void release() {
-        ImitateToast.getInstance().releaseSource();
+    public static void unInit() {
+        ImitateToast.getInstance().unregister();
     }
 }

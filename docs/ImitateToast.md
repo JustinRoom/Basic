@@ -15,7 +15,7 @@ public class MainApp extends BaseApplication {
     public void onTerminate() {
         super.onTerminate();
         ...
-        ImitateToast.release();
+        ImitateToast.unInit();
     }
 }
 ```
@@ -44,11 +44,4 @@ public class MainApp extends BaseApplication {
 #### 1.3、ImitateToast使用
 ```
 ImitateToast.show("clicked button");
-
-new ImitateToast.Builder()
-        .gravity(Gravity.CENTER)
-        .x(0)
-        .y(48)
-        .time(3_000L)
-        .show("提示文案");
 ```
