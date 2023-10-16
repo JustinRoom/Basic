@@ -2,6 +2,7 @@ package com.jsc.basic;
 
 import android.Manifest;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 
@@ -11,6 +12,7 @@ import com.jsc.basic.databinding.ActivityMainBinding;
 
 import jsc.org.lib.basic.framework.ABaseActivity;
 import jsc.org.lib.basic.object.LoggerImpl;
+import jsc.org.lib.basic.utils.ImagePreviewDialogUtils;
 import jsc.org.lib.basic.utils.ItemBackgroundUtils;
 import jsc.org.lib.basic.utils.ViewUtils;
 import jsc.org.lib.basic.widget.CustomTitleBar;
@@ -33,6 +35,7 @@ public class MainActivity extends ABaseActivity {
         registerPermissionLauncher();
         registerExternalStorageManagerLauncher();
         registerDrawOverlaysLauncher();
+        registerTakePhotoLauncher();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         binding.titleBar.setTitle("主页");
@@ -62,6 +65,12 @@ public class MainActivity extends ABaseActivity {
                 index++;
                 ImitateToast.show("clicked button" + index);
                 LoggerImpl.getInstance().i("ViewClick", index + " clicked the view.", true);
+            }
+        });
+        binding.btnTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePhoto();
             }
         });
         return binding.getRoot();
@@ -101,6 +110,14 @@ public class MainActivity extends ABaseActivity {
         super.onExternalStorageManagerLaunchBack(resultCode, data);
         if (isExternalStorageManager(false)) {
             canDrawOverlays(true);
+        }
+    }
+
+    @Override
+    public void onTakePhotoLaunchBack(int resultCode, String path) {
+        super.onTakePhotoLaunchBack(resultCode, path);
+        if (!TextUtils.isEmpty(path)) {
+            ImagePreviewDialogUtils.showImagePreviewDialog(this, path);
         }
     }
 }
