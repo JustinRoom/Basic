@@ -22,7 +22,7 @@ public final class ImagePreviewDialogUtils {
         ImageView view = new ImageView(context);
         view.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         view.setBackgroundColor(Color.BLACK);
-        ViewOutlineUtils.applyRoundOutline2(view, 12);
+        ViewOutlineUtils.applyDPRoundCorner(view, 12);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         Point size;
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {

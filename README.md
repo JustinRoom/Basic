@@ -24,6 +24,7 @@
 |[ScreenStateHelper](/basicLibrary/src/main/java/jsc/org/lib/basic/object/ScreenStateHelper.java)||
 |[SharePreferenceObj](/basicLibrary/src/main/java/jsc/org/lib/basic/object/SharePreferenceObj.java)||
 |[SystemTtsHelper](/basicLibrary/src/main/java/jsc/org/lib/basic/object/SystemTtsHelper.java)||
+|[UDiskManager](/basicLibrary/src/main/java/jsc/org/lib/basic/object/UDiskManager.java)||
 |[UpdateTextRunnable](/basicLibrary/src/main/java/jsc/org/lib/basic/object/UpdateTextRunnable.java)|| 
 
 ### utils

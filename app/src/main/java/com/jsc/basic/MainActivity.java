@@ -14,6 +14,7 @@ import jsc.org.lib.basic.framework.ABaseActivity;
 import jsc.org.lib.basic.object.LoggerImpl;
 import jsc.org.lib.basic.utils.ImagePreviewDialogUtils;
 import jsc.org.lib.basic.utils.ItemBackgroundUtils;
+import jsc.org.lib.basic.utils.ViewOutlineUtils;
 import jsc.org.lib.basic.utils.ViewUtils;
 import jsc.org.lib.basic.widget.CustomTitleBar;
 import jsc.org.lib.basic.widget.imitate.ImitateLoadingDialog;
@@ -46,20 +47,20 @@ public class MainActivity extends ABaseActivity {
                 onBackPressed();
             }
         });
-        binding.tvContent.setOnClickListener(new View.OnClickListener() {
+        binding.btnImitateLoadingDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ImitateToast.show("Loading...", Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, getContentViewTop() + ViewUtils.statusBarHeight(getResources()) + 12);
                 showLoadingDialog();
             }
         });
-        binding.btnSub.setOnClickListener(new View.OnClickListener() {
+        binding.btnCircularProgress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), SubActivity.class));
+                startActivity(new Intent(v.getContext(), CircularProgressActivity.class));
             }
         });
-        binding.btnTest.setOnClickListener(new View.OnClickListener() {
+        binding.btnLogger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 index++;
@@ -73,6 +74,17 @@ public class MainActivity extends ABaseActivity {
                 takePhoto();
             }
         });
+        binding.btnRoundCornerViewOutline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), RoundCornerViewOutlineActivity.class));
+            }
+        });
+        ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnImitateLoadingDialog);
+        ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnCircularProgress);
+        ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnLogger);
+        ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnTakePhoto);
+        ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnRoundCornerViewOutline);
         return binding.getRoot();
     }
 

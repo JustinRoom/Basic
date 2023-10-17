@@ -7,7 +7,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
-import jsc.org.lib.basic.inter.RoundEdgeViewOutlineProvider;
+import jsc.org.lib.basic.inter.RoundCornerViewOutlineProvider;
 import jsc.org.lib.basic.inter.RoundViewOutlineProvider;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -67,18 +67,18 @@ public final class ViewOutlineUtils {
         view.setClipToOutline(true);
     }
 
-    public static void applyRoundOutline2(View view, float dipRadius) {
-        float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipRadius, view.getResources().getDisplayMetrics());
-        applyRoundOutline1(view, radius);
-    }
-
-    public static void applyRoundOutline1(View view, final float radius) {
+    public static void applyRoundCorner(View view, final float radius) {
         view.setOutlineProvider(new RoundViewOutlineProvider(radius));
         view.setClipToOutline(true);
     }
 
-    public static void applyRoundEdgOutline(View view, @RoundEdgeViewOutlineProvider.Edge int edge, final float radius) {
-        view.setOutlineProvider(new RoundEdgeViewOutlineProvider(edge, radius));
+    public static void applyDPRoundCorner(View view, float dipRadius) {
+        float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipRadius, view.getResources().getDisplayMetrics());
+        applyRoundCorner(view, radius);
+    }
+
+    public static void applyRoundCorner(View view, int corner, final float radius) {
+        view.setOutlineProvider(new RoundCornerViewOutlineProvider(corner, radius));
         view.setClipToOutline(true);
     }
 

@@ -5,18 +5,18 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jsc.basic.databinding.ActivitySubBinding;
+import com.jsc.basic.databinding.ActivityCircularProgressBinding;
 
 import jsc.org.lib.basic.utils.ViewOutlineUtils;
 
-public class SubActivity extends AppCompatActivity {
+public class CircularProgressActivity extends AppCompatActivity {
 
-    ActivitySubBinding binding;
+    ActivityCircularProgressBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivitySubBinding.inflate(getLayoutInflater());
+        binding = ActivityCircularProgressBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.tvSweep);
         binding.tvSweep.setOnClickListener(new View.OnClickListener() {
