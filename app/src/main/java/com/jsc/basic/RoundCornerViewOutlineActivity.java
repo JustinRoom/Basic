@@ -27,7 +27,7 @@ public class RoundCornerViewOutlineActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ViewOutlineUtils.applyRoundCorner(binding.ivPic,
+        ViewOutlineUtils.applyRoundCornerPixel(binding.ivPic,
                 RoundCornerViewOutlineProvider.TOP_LEFT | RoundCornerViewOutlineProvider.BOTTOM_RIGHT,
                 6);
     }

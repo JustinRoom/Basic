@@ -29,7 +29,7 @@ public final class ImitateLoadingDialog extends BaseImitateDialog {
         ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
         params.width = size;
         params.height = size;
-        ViewOutlineUtils.applyDPRoundCorner(binding.getRoot(), 8);
+        ViewOutlineUtils.applyRoundCornerDp(binding.getRoot(), 8);
     }
 
     @Override

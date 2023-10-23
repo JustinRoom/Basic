@@ -67,17 +67,17 @@ public final class ViewOutlineUtils {
         view.setClipToOutline(true);
     }
 
-    public static void applyRoundCorner(View view, final float radius) {
+    public static void applyRoundCornerPixel(View view, final float radius) {
         view.setOutlineProvider(new RoundViewOutlineProvider(radius));
         view.setClipToOutline(true);
     }
 
-    public static void applyDPRoundCorner(View view, float dipRadius) {
+    public static void applyRoundCornerDp(View view, float dipRadius) {
         float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipRadius, view.getResources().getDisplayMetrics());
-        applyRoundCorner(view, radius);
+        applyRoundCornerPixel(view, radius);
     }
 
-    public static void applyRoundCorner(View view, int corner, final float radius) {
+    public static void applyRoundCornerPixel(View view, int corner, final float radius) {
         view.setOutlineProvider(new RoundCornerViewOutlineProvider(corner, radius));
         view.setClipToOutline(true);
     }

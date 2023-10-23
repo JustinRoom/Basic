@@ -6,6 +6,7 @@
         <entry key="..\:/WorkspaceForGitHub/Basic/app/src/main/res/layout/activity_main.xml" value="0.3338541666666667" />
         <entry key="..\:/WorkspaceForGitHub/Basic/app/src/main/res/layout/activity_round_corner_view_outline.xml" value="0.3484375" />
         <entry key="..\:/WorkspaceForGitHub/Basic/app/src/main/res/layout/activity_sub.xml" value="0.3494791666666667" />
+        <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/drawable-v21/base_background_ripple_001.xml" value="0.29" />
         <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/drawable-v21/base_negative_button_background_ripple.xml" value="0.29" />
         <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/drawable-v21/base_positive_button_background_ripple.xml" value="0.29" />
         <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/drawable-v21/custom_negative_button_background_ripple.xml" value="0.29" />
@@ -13,7 +14,10 @@
         <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/drawable/base_loading_background.xml" value="0.29" />
         <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/drawable/base_loading_progress.xml" value="0.29" />
         <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/drawable/base_title_bar_background.xml" value="0.29" />
+        <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/drawable/btn_round_green_selector.xml" value="0.29" />
         <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/drawable/common_ic_baseline_close_white_56.xml" value="0.29" />
+        <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/layout/activity_image_crop.xml" value="0.3494791666666667" />
+        <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/layout/base_activity_image_selector.xml" value="0.2814814814814815" />
         <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/layout/base_dialog_loading.xml" value="0.3494791666666667" />
         <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/layout/dialog_custom_expandabel.xml" value="0.28072916666666664" />
         <entry key="..\:/WorkspaceForGitHub/Basic/basicLibrary/src/main/res/layout/test_layout.xml" value="0.3484375" />

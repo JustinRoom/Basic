@@ -21,6 +21,12 @@ public final class ViewUtils {
         return v.getId() == id;
     }
 
+    public static void applyToNavigationBarHeight(View view, int minHeight) {
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.height = Math.max(navigationBarHeight(view.getResources()), minHeight);
+        view.setLayoutParams(params);
+    }
+
     public static void applyToNavigationBarHeight(View view) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         params.height = navigationBarHeight(view.getResources());
