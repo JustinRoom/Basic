@@ -53,7 +53,7 @@ public final class ImitateToast {
             mView.setGravity(Gravity.CENTER);
             mView.setTextColor(Color.WHITE);
             mView.setBackgroundColor(0xBF000000);
-            mView.setPadding(padding, padding / 3, padding, padding / 3);
+            mView.setPadding(padding, padding / 2, padding, padding / 2);
             mView.setMinWidth(context.getResources().getDisplayMetrics().widthPixels / 4);
             mView.setMaxWidth(context.getResources().getDisplayMetrics().widthPixels * 4 / 5);
             mView.setMaxLines(32);
