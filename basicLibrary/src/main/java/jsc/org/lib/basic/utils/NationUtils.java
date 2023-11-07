@@ -88,7 +88,7 @@ public final class NationUtils {
         for (String c : map.keySet()) {
             String n = map.get(c);
             assert n != null;
-            if (n.startsWith(name)) {
+            if (n.equals(name) || (n.endsWith("族") && n.substring(0, n.length() - 1).equals(name))) {
                 return new Pair<>(c, n);
             }
         }

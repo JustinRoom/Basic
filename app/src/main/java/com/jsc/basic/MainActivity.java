@@ -32,7 +32,6 @@ public class MainActivity extends ABaseActivity {
 
     @Override
     public View initContentView() {
-        ImitateToast.init(this, null);
         registerPermissionLauncher();
         registerExternalStorageManagerLauncher();
         registerDrawOverlaysLauncher();
@@ -80,11 +79,18 @@ public class MainActivity extends ABaseActivity {
                 startActivity(new Intent(v.getContext(), RoundCornerViewOutlineActivity.class));
             }
         });
+        binding.btnLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), LocationActivity.class));
+            }
+        });
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnImitateLoadingDialog);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnCircularProgress);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnLogger);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnTakePhoto);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnRoundCornerViewOutline);
+        ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnLocation);
         return binding.getRoot();
     }
 

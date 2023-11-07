@@ -17,6 +17,7 @@
 |[CountDownImpl](/basicLibrary/src/main/java/jsc/org/lib/basic/object/CountDownImpl.java)||
 |[IdWorker](/basicLibrary/src/main/java/jsc/org/lib/basic/object/IdWorker.java)||
 |[LocalFileManager](/basicLibrary/src/main/java/jsc/org/lib/basic/object/LocalFileManager.java)||
+|[Locator](/basicLibrary/src/main/java/jsc/org/lib/basic/object/Locator.java)||
 |[LoggerImpl](/basicLibrary/src/main/java/jsc/org/lib/basic/object/LoggerImpl.java)|[docs](/docs/LoggerImpl.md)|
 |[MediaRecorderHelper](/basicLibrary/src/main/java/jsc/org/lib/basic/object/MediaRecorderHelper.java)||
 |[NfcConnector](/basicLibrary/src/main/java/jsc/org/lib/basic/object/NfcConnector.java)||
@@ -34,7 +35,6 @@
 |[AssetsUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AssetsUtils.java)||
 |[BitmapUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/BitmapUtils.java)||
 |[ContentValuesUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/ContentValuesUtils.java)||
-|[FloatNumberUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/FloatNumberUtils.java)||
 |[HtmlUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/HtmlUtils.java)||
 |[ImagePreviewDialogUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/ImagePreviewDialogUtils.java)||
 |[ImageReaderUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/ImageReaderUtils.java)||
@@ -42,6 +42,7 @@
 |[ListUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/ListUtils.java)||
 |[MD5Utils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/MD5Utils.java)||
 |[MyFileUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/MyFileUtils.java)||
+|[NationUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/NationUtils.java)||
 |[NetworkUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/NetworkUtils.java)||
 |[OSUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/OSUtils.java)||
 |[StringUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/StringUtils.java)||
