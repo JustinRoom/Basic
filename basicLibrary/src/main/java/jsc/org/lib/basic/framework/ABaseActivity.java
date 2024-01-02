@@ -35,6 +35,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -46,9 +47,7 @@ public abstract class ABaseActivity extends AppCompatActivity {
 
     private boolean firstLoad = true;
     private ActivityResultLauncher<String[]> mPermissionLauncher = null;
-    private ActivityResultLauncher<Intent> mExternalStorageManagerLauncher = null;
-    private ActivityResultLauncher<Intent> mDrawOverlaysLauncher = null;
-    private ActivityResultLauncher<Intent> mTakePhotoLauncher = null;
+    private final Map<String, ActivityResultLauncher<Intent>> mActivityResultLauncherMap = new HashMap<>();
 
     public boolean enableActionBar() {
         return true;
@@ -289,8 +288,7 @@ public abstract class ABaseActivity extends AppCompatActivity {
         return getWindow().findViewById(getWindowContentId()).getTop();
     }
 
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>> about permissions
-
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>> permissions
     public final void registerPermissionLauncher() {
         if (mPermissionLauncher == null) {
             mPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
@@ -308,6 +306,10 @@ public abstract class ABaseActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void onPermissionLaunchBack(String[] unGrantPermissions) {
+
     }
 
     /**
@@ -337,19 +339,29 @@ public abstract class ABaseActivity extends AppCompatActivity {
         mPermissionLauncher.launch(unGrantPermissions);
     }
 
-    public void onPermissionLaunchBack(String[] unGrantPermissions) {
-
+    public final void registerActivityResultLauncher(String key, ActivityResultCallback<ActivityResult> callback) {
+        if (!mActivityResultLauncherMap.containsKey(key)) {
+            ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), callback);
+            mActivityResultLauncherMap.put(key, launcher);
+        }
     }
 
+    public final ActivityResultLauncher<Intent> getActivityResultLauncher(String key) {
+        return mActivityResultLauncherMap.get(key);
+    }
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>> External StorageManager
     public final void registerExternalStorageManagerLauncher() {
-        if (mExternalStorageManagerLauncher == null) {
-            mExternalStorageManagerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    onExternalStorageManagerLaunchBack(result.getResultCode(), result.getData());
-                }
-            });
-        }
+        registerActivityResultLauncher("externalStorageManager", new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                onExternalStorageManagerLaunchBack(result.getResultCode(), result.getData());
+            }
+        });
+    }
+
+    public void onExternalStorageManagerLaunchBack(int resultCode, @Nullable Intent data) {
+
     }
 
     /**
@@ -362,27 +374,27 @@ public abstract class ABaseActivity extends AppCompatActivity {
         //Android11及以上版本，申请sdcard读写权限
         boolean result = Environment.isExternalStorageManager();
         if (!result && toSetting) {
-            if (mExternalStorageManagerLauncher == null)
+            ActivityResultLauncher<Intent> launcher = getActivityResultLauncher("externalStorageManager");
+            if (launcher == null)
                 throw new IllegalStateException("Please call method 'registerExternalStorageManagerLauncher()' first.");
             //manifest文件中需要申明"android.permission.MANAGE_EXTERNAL_STORAGE"权限
-            mExternalStorageManagerLauncher.launch(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
+            launcher.launch(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
         }
         return result;
     }
 
-    public void onExternalStorageManagerLaunchBack(int resultCode, @Nullable Intent data) {
-
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>> Draw Overlays
+    public final void registerDrawOverlaysLauncher() {
+        registerActivityResultLauncher("drawOverlays", new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                onDrawOverlaysLaunchBack(result.getResultCode(), result.getData());
+            }
+        });
     }
 
-    public final void registerDrawOverlaysLauncher() {
-        if (mDrawOverlaysLauncher == null) {
-            mDrawOverlaysLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    onDrawOverlaysLaunchBack(result.getResultCode(), result.getData());
-                }
-            });
-        }
+    public void onDrawOverlaysLaunchBack(int resultCode, @Nullable Intent data) {
+
     }
 
     /**
@@ -395,35 +407,35 @@ public abstract class ABaseActivity extends AppCompatActivity {
         //Android6及以上版本，申请悬浮窗权限
         boolean result = Settings.canDrawOverlays(this);
         if (!result && toSetting) {
-            if (mDrawOverlaysLauncher == null)
+            ActivityResultLauncher<Intent> launcher = getActivityResultLauncher("drawOverlays");
+            if (launcher == null)
                 throw new IllegalStateException("Please call method 'registerDrawOverlaysLauncher()' first.");
             //manifest文件中需要申明"android.permission.SYSTEM_ALERT_WINDOW"权限
-            mDrawOverlaysLauncher.launch(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
+            launcher.launch(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
         }
         return result;
     }
 
-    public void onDrawOverlaysLaunchBack(int resultCode, @Nullable Intent data) {
-
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>> Take Photo
+    public final void registerTakePhotoLauncher() {
+        registerActivityResultLauncher("takePhoto", new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                String path = null;
+                if (result.getResultCode() == RESULT_OK) {
+                    path = ContentValuesUtils.queryPath(getApplicationContext(), mPhotoUri);
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    getContentResolver().delete(mPhotoUri, null);
+                } else {
+                    //do nothing
+                }
+                onTakePhotoLaunchBack(result.getResultCode(), path);
+            }
+        });
     }
 
-    public final void registerTakePhotoLauncher() {
-        if (mTakePhotoLauncher == null) {
-            mTakePhotoLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    String path = null;
-                    if (result.getResultCode() == RESULT_OK) {
-                        path = ContentValuesUtils.queryPath(getApplicationContext(), mPhotoUri);
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        getContentResolver().delete(mPhotoUri, null);
-                    } else {
-                        //do nothing
-                    }
-                    onTakePhotoLaunchBack(result.getResultCode(), path);
-                }
-            });
-        }
+    public void onTakePhotoLaunchBack(int resultCode, String path) {
+
     }
 
     private Uri mPhotoUri = null;
@@ -433,7 +445,8 @@ public abstract class ABaseActivity extends AppCompatActivity {
      */
     public final void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (mTakePhotoLauncher == null)
+        ActivityResultLauncher<Intent> launcher = getActivityResultLauncher("takePhoto");
+        if (launcher == null)
             throw new IllegalStateException("Please call method 'registerTakePhotoLauncher()' first.");
         ContentValues contentValues = new ContentValues(2);
         contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "pic_" + System.currentTimeMillis() + ".JPEG");
@@ -442,10 +455,37 @@ public abstract class ABaseActivity extends AppCompatActivity {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 contentValues);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
-        mTakePhotoLauncher.launch(intent);
+        launcher.launch(intent);
     }
 
-    public void onTakePhotoLaunchBack(int resultCode, String path) {
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>> Pick Image
+    public final void registerPickImageLauncher() {
+        registerActivityResultLauncher("pickImage", new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                String path = "";
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent intent = result.getData();
+                    Uri uri = intent == null ? null : intent.getData();
+                    if (uri != null) {
+                        path = ContentValuesUtils.queryPath(getApplicationContext(), uri);
+                    }
+                }
+                onPickImageLaunchBack(result.getResultCode(), path);
+            }
+        });
+    }
 
+    public void onPickImageLaunchBack(int resultCode, String path) {
+
+    }
+
+    public final void pickImage() {
+        ActivityResultLauncher<Intent> launcher = getActivityResultLauncher("pickImage");
+        if (launcher == null)
+            throw new IllegalStateException("Please call method 'registerPickImageLauncher()' first.");
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        launcher.launch(intent);
     }
 }

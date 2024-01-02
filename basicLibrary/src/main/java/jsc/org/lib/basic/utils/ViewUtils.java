@@ -2,7 +2,6 @@ package jsc.org.lib.basic.utils;
 
 import android.content.res.Resources;
 import android.text.Editable;
-import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -12,7 +11,7 @@ import androidx.annotation.NonNull;
 
 public final class ViewUtils {
 
-    public static void disableCrossClick(@NonNull View v){
+    public static void disableCrossClick(@NonNull View v) {
         v.setClickable(true);
         v.setFocusable(true);
     }
@@ -44,7 +43,12 @@ public final class ViewUtils {
     }
 
     public static String getEditText(EditText view) {
+        return getEditText(view, true);
+    }
+
+    public static String getEditText(EditText view, boolean trim) {
         Editable editable = view.getText();
-        return editable == null ? "" : editable.toString().trim();
+        String str = editable == null ? "" : editable.toString();
+        return trim ? str.trim() : str;
     }
 }

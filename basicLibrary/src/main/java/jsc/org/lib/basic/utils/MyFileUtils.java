@@ -148,7 +148,7 @@ public final class MyFileUtils {
     }
 
     @NonNull
-    public static String readFromFile(@NonNull File file) {
+    public static String readFromFile(@NonNull File file, boolean wrap) {
         if (!file.exists() || file.isDirectory()) {
             return "";
         }
@@ -160,6 +160,9 @@ public final class MyFileUtils {
             String line = null;
             while ((line = br.readLine()) != null) {
                 builder.append(line);
+                if (wrap) {
+                    builder.append("\n");
+                }
             }
             is.close();
         } catch (IOException e) {

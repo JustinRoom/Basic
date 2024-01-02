@@ -15,7 +15,12 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public final class LoggerImpl {
@@ -291,7 +296,7 @@ public final class LoggerImpl {
     private void initCurLogFile() {
         try {
             closeFileWriter();
-            String date = new SimpleDateFormat("yyyyMMdd", Locale.US).format(new Date());
+            final String date = new SimpleDateFormat("yyyyMMdd", Locale.US).format(new Date());
             int index = -1;
             while (true) {
                 index++;
@@ -310,8 +315,8 @@ public final class LoggerImpl {
                     mPreferences.edit().putString(lastDateStr, "").apply();
                 }
                 boolean cr = mLogFile.createNewFile();
+                writeHeaderInfo();
             }
-            writeHeaderInfo();
         } catch (IOException e) {
             e.printStackTrace();
         }

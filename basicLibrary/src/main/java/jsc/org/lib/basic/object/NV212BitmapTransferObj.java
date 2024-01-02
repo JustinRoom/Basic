@@ -62,6 +62,10 @@ public final class NV212BitmapTransferObj {
         return outBitmap;
     }
 
+    public void markAsNewOutBitmap() {
+        outBitmap = null;
+    }
+
     public void destroy() {
         destroyed = true;
         if (rs != null) {

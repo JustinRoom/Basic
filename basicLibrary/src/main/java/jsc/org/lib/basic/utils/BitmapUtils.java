@@ -81,6 +81,12 @@ public final class BitmapUtils {
 
     public static Bitmap decodeFile(String filePath,
                                     BitmapFactory.Options options,
+                                    @IntRange(from = 0) int maxSize) {
+        return decodeFile(filePath, options, maxSize, maxSize);
+    }
+
+    public static Bitmap decodeFile(String filePath,
+                                    BitmapFactory.Options options,
                                     @IntRange(from = 0) int maxWidth,
                                     @IntRange(from = 0) int maxHeight) {
         if (filePath == null

@@ -64,4 +64,18 @@ public final class AssetsUtils {
             boolean dr = file.delete();
         }
     }
+
+    public static byte[] readAssetsData(Context context, String fileName) {
+        try {
+            InputStream is = context.getAssets().open(fileName);
+            int lenght = is.available();
+            byte[] buffer = new byte[lenght];
+            int val = is.read(buffer);
+            is.close();
+            return buffer;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

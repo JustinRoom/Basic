@@ -2,11 +2,13 @@ package jsc.org.lib.basic.object;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * 系统自带文字转语音引擎
@@ -45,13 +47,30 @@ public final class SystemTtsHelper {
                     }
                 }
             });
+            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                @Override
+                public void onStart(String utteranceId) {
+
+                }
+
+                @Override
+                public void onDone(String utteranceId) {
+
+                }
+
+                @Override
+                public void onError(String utteranceId) {
+
+                }
+            });
         }
     }
 
     private void initLanguage() {
         //设置播放语言
         int result = tts.setLanguage(mLanguage);
-        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+        if (result == TextToSpeech.LANG_MISSING_DATA
+                || result == TextToSpeech.LANG_NOT_SUPPORTED) {
             Toast.makeText(mContext, "不支持", Toast.LENGTH_SHORT).show();
         } else if (result == TextToSpeech.LANG_AVAILABLE) {
             //初始化成功之后才可以播放文字
@@ -71,24 +90,17 @@ public final class SystemTtsHelper {
     }
 
     /**
-     * 加入队列的待播报文字按顺序播放
+     * 播报语音
      *
+     * @param queueMode 0-flush; 1-add
      * @param txt
      */
-    public void addSpeak(String txt) {
-        if (tts != null && available && txt != null && txt.trim().length() > 0) {
-            tts.speak(txt, TextToSpeech.QUEUE_ADD, null);
-        }
-    }
-
-    /**
-     * 替换原有文字
-     *
-     * @param txt
-     */
-    public void flushSpeak(String txt) {
-        if (tts != null && available && txt != null && txt.trim().length() > 0) {
-            tts.speak(txt, TextToSpeech.QUEUE_FLUSH, null);
+    public void speak(int queueMode, CharSequence txt) {
+        if (tts != null && available) {
+            String str = txt == null ? "" : txt.toString().trim();
+            if (str.length() > 0 && str.length() < TextToSpeech.getMaxSpeechInputLength()) {
+                tts.speak(txt, queueMode, null, UUID.randomUUID().toString());
+            }
         }
     }
 

@@ -23,6 +23,7 @@ public class BaseApplication extends Application {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
+                e.printStackTrace();
                 LoggerImpl.getInstance().t(null, e, true);
             }
         });
