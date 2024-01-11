@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import jsc.org.lib.basic.inter.OnFragmentEventListener;
+import jsc.org.lib.basic.utils.AnimUtils;
 import jsc.org.lib.basic.utils.ViewUtils;
 
 public abstract class ABaseViewModule<A extends AppCompatActivity> {
@@ -31,12 +32,6 @@ public abstract class ABaseViewModule<A extends AppCompatActivity> {
 
     @CallSuper
     public void show() {
-        if (root == null) {
-            root = bindView(activity.getLayoutInflater(), parent);
-            if (root == null)
-                throw new IllegalArgumentException("Invalid content view for module:" + getClass().getSimpleName());
-            ViewUtils.disableCrossClick(root);
-        }
         attach();
         if (root.getVisibility() != View.VISIBLE) {
             root.setVisibility(View.VISIBLE);
@@ -54,6 +49,12 @@ public abstract class ABaseViewModule<A extends AppCompatActivity> {
     }
 
     public final void attach(ViewGroup.LayoutParams params) {
+        if (root == null) {
+            root = bindView(activity.getLayoutInflater(), parent);
+            if (root == null)
+                throw new IllegalArgumentException("Invalid content view for module:" + getClass().getSimpleName());
+            ViewUtils.disableCrossClick(root);
+        }
         if (root != null && root.getParent() == null) {
             if (params == null) {
                 params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -82,6 +83,18 @@ public abstract class ABaseViewModule<A extends AppCompatActivity> {
         if (listener != null) {
             listener.onEvent(key, data);
         }
+    }
+
+    public final void runShowAnimation() {
+        runShowAnimation("bottom", 320L);
+    }
+
+    public final void runShowAnimation(String from, long durationMillis) {
+        AnimUtils.translateBySelf(root, from, durationMillis);
+    }
+
+    public final boolean isInitialized() {
+        return parent != null;
     }
 
     public final A getActivity() {

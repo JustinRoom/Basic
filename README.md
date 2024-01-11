@@ -31,6 +31,7 @@
 ### utils
 | 控件 | 文档 |
 |:---|:---|
+|[AnimUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AnimUtils.java)||
 |[AntiShakeUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AntiShakeUtils.java)||
 |[AssetsUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AssetsUtils.java)||
 |[BitmapUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/BitmapUtils.java)||

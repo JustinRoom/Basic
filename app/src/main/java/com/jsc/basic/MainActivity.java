@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.jsc.basic.databinding.ActivityMainBinding;
 
@@ -85,18 +86,41 @@ public class MainActivity extends ABaseActivity {
                 startActivity(new Intent(v.getContext(), LocationActivity.class));
             }
         });
+        binding.btnSubFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSubFragment();
+            }
+        });
+        binding.btnSubViewModule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSubViewModule();
+            }
+        });
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnImitateLoadingDialog);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnCircularProgress);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnLogger);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnTakePhoto);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnRoundCornerViewOutline);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnLocation);
+        ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnSubFragment);
+        ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnSubViewModule);
         return binding.getRoot();
     }
 
     @Override
     public void onLazyLoad() {
         requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE});
+    }
+
+    @Override
+    public boolean onCustomBackPressed() {
+        if (viewModule.isShowing()) {
+            viewModule.hide();
+            return true;
+        }
+        return super.onCustomBackPressed();
     }
 
     @Override
@@ -137,5 +161,24 @@ public class MainActivity extends ABaseActivity {
         if (!TextUtils.isEmpty(path)) {
             ImagePreviewDialogUtils.showImagePreviewDialog(this, path);
         }
+    }
+
+    private void showSubFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("_subPage");
+        if (fragment == null) {
+            fragment = new SubPageFragment();
+            addFragment(R.id.fy_sub_page_container, fragment, "_subPage");
+        }
+    }
+
+    private final SubViewModule viewModule = new SubViewModule();
+    private void showSubViewModule() {
+        if (!viewModule.isInitialized()) {
+            viewModule.init(this, binding.fySubPageContainer, null);
+        }
+        if (!viewModule.isShowing()) {
+            viewModule.show();
+        }
+        viewModule.runShowAnimation();
     }
 }

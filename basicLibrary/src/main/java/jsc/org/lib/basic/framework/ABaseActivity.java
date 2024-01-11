@@ -67,6 +67,10 @@ public abstract class ABaseActivity extends AppCompatActivity {
         return android.R.id.content;
     }
 
+    public boolean onCustomBackPressed() {
+        return false;
+    }
+
     /**
      * Only call once.
      */
@@ -118,13 +122,11 @@ public abstract class ABaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (ImitateDialogManager.cancel(this)) {
-            return;
-        }
-        if (!backFragment()) {
-            super.onBackPressed();
-        }
+    public final void onBackPressed() {
+        if (ImitateDialogManager.cancel(this)) return;
+        if (backFragment()) return;
+        if (onCustomBackPressed()) return;
+        super.onBackPressed();
     }
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>fragment manager start<<<<<<<<<<<<<<<<<<<<<<<
@@ -269,13 +271,17 @@ public abstract class ABaseActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public final void vibrateClick() {
+    public final void vibrate(VibrationEffect effect) {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(VibrationEffect.EFFECT_TICK);
+        vibrator.vibrate(effect);
     }
 
     public final boolean isPortrait() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    public final boolean isLandscape() {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     public final void showToast(@Nullable CharSequence txt) {
