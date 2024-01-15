@@ -1,7 +1,7 @@
 package com.jsc.basic;
 
 import jsc.org.lib.basic.framework.BaseApplication;
-import jsc.org.lib.basic.object.Locator;
+import jsc.org.lib.basic.object.LocationLiveData;
 import jsc.org.lib.basic.widget.imitate.ImitateToast;
 
 public class MyApplication extends BaseApplication {
@@ -10,6 +10,6 @@ public class MyApplication extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         ImitateToast.init(this, null);
-        Locator.getInstance().init(this);
+        LocationLiveData.getInstance().init(this);
     }
 }

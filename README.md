@@ -17,7 +17,7 @@
 |[CountDownImpl](/basicLibrary/src/main/java/jsc/org/lib/basic/object/CountDownImpl.java)||
 |[IdWorker](/basicLibrary/src/main/java/jsc/org/lib/basic/object/IdWorker.java)||
 |[LocalFileManager](/basicLibrary/src/main/java/jsc/org/lib/basic/object/LocalFileManager.java)||
-|[Locator](/basicLibrary/src/main/java/jsc/org/lib/basic/object/Locator.java)||
+|[LocationLiveData](/basicLibrary/src/main/java/jsc/org/lib/basic/object/LocationLiveData.java)||
 |[LoggerImpl](/basicLibrary/src/main/java/jsc/org/lib/basic/object/LoggerImpl.java)|[docs](/docs/LoggerImpl.md)|
 |[MediaRecorderHelper](/basicLibrary/src/main/java/jsc/org/lib/basic/object/MediaRecorderHelper.java)||
 |[NfcConnector](/basicLibrary/src/main/java/jsc/org/lib/basic/object/NfcConnector.java)||
