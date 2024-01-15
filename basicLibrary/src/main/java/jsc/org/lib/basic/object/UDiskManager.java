@@ -4,6 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Environment;
+import android.os.storage.StorageManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * declare in 'AndroidManifest.xml':<br>
@@ -59,6 +64,10 @@ public final class UDiskManager {
             filter.addAction(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             filter.addDataScheme("file");
             mContext.registerReceiver(receiver, filter);
+            List<String> directories = getUSBTempRootDirectories(mContext);
+            if (!directories.isEmpty() && listener != null) {
+                listener.in(directories.get(0));
+            }
         }
     }
 
@@ -78,5 +87,32 @@ public final class UDiskManager {
         void in(String path);
 
         void out(String path);
+    }
+
+    /**
+     * 获取 U 盘临时根目录（一体机会在临时目录下再创建多个包含 "udisk" 的目录，所以临时目录并不是 U 盘真正的根目录）
+     */
+    public static List<String> getUSBTempRootDirectories(Context context) {
+        List<String> directories = new ArrayList<>();
+        try {
+            StorageManager storageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+            Class<StorageManager> storageManagerClass = StorageManager.class;
+            String[] paths = (String[]) storageManagerClass.getMethod("getVolumePaths").invoke(storageManager);
+            if (paths == null) {
+                paths = new String[]{};
+            }
+            for (String path : paths) {
+                Object volumeState = storageManagerClass.getMethod("getVolumeState", String.class).invoke(storageManager, path);
+                //路劲包含 internal 一般是内部存储，例如 /mnt/internal_sd，需要排除
+                if (!path.contains("emulated")
+                        && !path.contains("internal")
+                        && Environment.MEDIA_MOUNTED.equals(volumeState)) {
+                    directories.add(path);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return directories;
     }
 }

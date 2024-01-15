@@ -20,6 +20,10 @@ public final class ViewUtils {
         return v.getId() == id;
     }
 
+    public static boolean viewEqual(View view1, View view2) {
+        return view1 == view2;
+    }
+
     public static void applyToNavigationBarHeight(View view, int minHeight) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         params.height = Math.max(navigationBarHeight(view.getResources()), minHeight);

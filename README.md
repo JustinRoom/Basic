@@ -14,6 +14,7 @@
 | 控件 | 文档 |
 |:---|:---|
 |[MessageDispatcher](/basicLibrary/src/main/java/jsc/org/lib/basic/object/event/MessageDispatcher.java)||
+|[CopyFileRunnable](/basicLibrary/src/main/java/jsc/org/lib/basic/object/CopyFileRunnable.java)||
 |[CountDownImpl](/basicLibrary/src/main/java/jsc/org/lib/basic/object/CountDownImpl.java)||
 |[IdWorker](/basicLibrary/src/main/java/jsc/org/lib/basic/object/IdWorker.java)||
 |[LocalFileManager](/basicLibrary/src/main/java/jsc/org/lib/basic/object/LocalFileManager.java)||
