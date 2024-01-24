@@ -32,6 +32,7 @@
 ### utils
 | 控件 | 文档 |
 |:---|:---|
+|[AESUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AESUtils.java)||
 |[AnimUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AnimUtils.java)||
 |[AntiShakeUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AntiShakeUtils.java)||
 |[AssetsUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/AssetsUtils.java)||
