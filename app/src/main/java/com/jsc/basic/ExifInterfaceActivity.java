@@ -14,6 +14,7 @@ import java.util.Locale;
 
 import jsc.org.lib.basic.framework.ABaseActivity;
 import jsc.org.lib.basic.object.LocalFileManager;
+import jsc.org.lib.basic.utils.AESUtils;
 import jsc.org.lib.basic.utils.MyFileUtils;
 import jsc.org.lib.basic.utils.ViewOutlineUtils;
 
@@ -60,12 +61,13 @@ public class ExifInterfaceActivity extends ABaseActivity {
         File to = new File(LocalFileManager.getInstance().getExternalFilesDir("images"), file.getName());
         MyFileUtils.nioTransferCopy(file, to);
 
+        String timestamp = String.valueOf(System.currentTimeMillis());
         try {
             ExifInterface face = new ExifInterface(to);
             //ExifInterface.TAG_IMAGE_UNIQUE_ID为可见属性，不可编辑，稳定
-            face.setAttribute(ExifInterface.TAG_IMAGE_UNIQUE_ID, "gxzzzzqjyksyA");
+            face.setAttribute(ExifInterface.TAG_ARTIST, AESUtils.encrypt("gxzzzzqjyksyA" + timestamp, "gxzzzzqjyksygzyj"));
             //ExifInterface.TAG_BODY_SERIAL_NUMBER为隐藏属性，稳定
-            face.setAttribute(ExifInterface.TAG_BODY_SERIAL_NUMBER, String.valueOf(System.currentTimeMillis()));
+            face.setAttribute(ExifInterface.TAG_BODY_SERIAL_NUMBER, timestamp);
             face.saveAttributes();
         } catch (IOException e) {
             e.printStackTrace();
