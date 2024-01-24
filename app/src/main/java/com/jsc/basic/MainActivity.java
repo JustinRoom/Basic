@@ -98,6 +98,12 @@ public class MainActivity extends ABaseActivity {
                 showSubViewModule();
             }
         });
+        binding.btnExif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), ExifInterfaceActivity.class));
+            }
+        });
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnImitateLoadingDialog);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnCircularProgress);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnLogger);
@@ -106,6 +112,7 @@ public class MainActivity extends ABaseActivity {
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnLocation);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnSubFragment);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnSubViewModule);
+        ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnExif);
         return binding.getRoot();
     }
 

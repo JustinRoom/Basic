@@ -110,4 +110,10 @@ public final class StringUtils {
         }
         return builder.toString();
     }
+
+    public boolean isEqual(String str1, String str2) {
+        return !TextUtils.isEmpty(str1)
+                && !TextUtils.isEmpty(str2)
+                && str1.equals(str2);
+    }
 }
