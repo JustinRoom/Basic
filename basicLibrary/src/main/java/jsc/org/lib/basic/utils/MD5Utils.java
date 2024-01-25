@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -11,38 +12,30 @@ public final class MD5Utils {
 
     private final static String[] HEX_CODE = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
 
-    public static String md5(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return "";
-        }
-        try {
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            byte[] bytes = digest.digest(str.getBytes());
-            StringBuilder result = new StringBuilder();
-            for (byte b : bytes) {
-                String temp = Integer.toHexString(b & 0xff);
-                if (temp.length() == 1) {
-                    temp = "0" + temp;
-                }
-                result.append(temp);
-            }
-            return result.toString().toUpperCase();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
+    public static String md5_32(String str) {
+        return TextUtils.isEmpty(str) ? "" : md5_32(str.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static String md5(File file) {
+    public static String md5_16(String str) {
+        return TextUtils.isEmpty(str) ? "" : md5_16(str.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static String md5_16(File file) {
+        String md5_32 = md5_32(file);
+        return TextUtils.isEmpty(md5_32) ? "" : md5_32.substring(8, 24);
+    }
+
+    public static String md5_32(File file) {
         try {
             if (file.isFile()) {
-                FileInputStream fileInputStream = new FileInputStream(file);
+                FileInputStream stream = new FileInputStream(file);
                 MessageDigest digest = MessageDigest.getInstance("MD5");
                 byte[] buf = new byte[8192];
-                int len;
-                while ((len = fileInputStream.read(buf)) > 0) {
+                int len = 0;
+                while ((len = stream.read(buf)) > 0) {
                     digest.update(buf, 0, len);
                 }
+                stream.close();
                 return toHexString(digest.digest());
             }
         } catch (Exception e) {
@@ -51,17 +44,22 @@ public final class MD5Utils {
         return "";
     }
 
-    public static String md5(byte[] bytes) {
+    public static String md5_16(byte[] bytes) {
+        String md5_32 = md5_32(bytes);
+        return TextUtils.isEmpty(md5_32) ? "" : md5_32.substring(8, 24);
+    }
+
+    public static String md5_32(byte[] bytes) {
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.update(bytes);
+            //返回32位md5码
             return toHexString(digest.digest());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return "";
     }
-
 
     private static String toHexString(byte[] data) {
         StringBuilder r = new StringBuilder(data.length * 2);
