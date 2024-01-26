@@ -51,6 +51,7 @@
 |[StringUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/StringUtils.java)||
 |[ViewOutlineUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/ViewOutlineUtils.java)||
 |[ViewUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/ViewUtils.java)||
+|[YCrCbSkinColorDetectUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/YCrCbSkinColorDetectUtils.java)||
 |[YUV420EfficientUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/utils/YUV420EfficientUtils.java)||
 
 ### widget
@@ -58,6 +59,7 @@
 |:---|:---|
 |[CustomExpandableDialog](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/dialog/CustomExpandableDialog.java)|[docs](/docs/CustomExpandableDialog.md)|
 |[ImitateLoadingDialog](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/imitate/ImitateLoadingDialog.java)||
+|[ImitateLoadingDialogUtils](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/imitate/ImitateLoadingDialogUtils.java)||
 |[ImitateToast](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/imitate/ImitateToast.java)|[docs](/docs/ImitateToast.md)|
 |[CircularProgressView](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/CircularProgressView.java)|[docs](/docs/CircularProgressView.md)|
 |[CollapsibleFlowLayout](/basicLibrary/src/main/java/jsc/org/lib/basic/widget/CollapsibleFlowLayout.java)||

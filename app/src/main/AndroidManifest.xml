@@ -27,6 +27,9 @@
             android:name=".ExifInterfaceActivity"
             android:exported="false" />
         <activity
+            android:name=".SkinColorDetectActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

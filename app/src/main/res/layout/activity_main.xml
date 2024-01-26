@@ -156,6 +156,22 @@
         app:layout_constraintTop_toBottomOf="@id/btn_sub_view_module"
         app:layout_constraintWidth_percent=".75" />
 
+    <TextView
+        android:id="@+id/btn_skin_color_detect"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/base_positive_button_background_ripple"
+        android:gravity="center"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:text="SkinColorDetect"
+        android:textColor="#fff"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_exif"
+        app:layout_constraintWidth_percent=".75" />
+
     <FrameLayout
         android:id="@+id/fy_sub_page_container"
         android:layout_width="match_parent"

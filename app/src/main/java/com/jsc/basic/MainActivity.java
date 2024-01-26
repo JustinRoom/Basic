@@ -104,6 +104,12 @@ public class MainActivity extends ABaseActivity {
                 startActivity(new Intent(v.getContext(), ExifInterfaceActivity.class));
             }
         });
+        binding.btnSkinColorDetect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), SkinColorDetectActivity.class));
+            }
+        });
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnImitateLoadingDialog);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnCircularProgress);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnLogger);
@@ -113,6 +119,7 @@ public class MainActivity extends ABaseActivity {
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnSubFragment);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnSubViewModule);
         ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnExif);
+        ViewOutlineUtils.applyHorizontalEllipticOutline(binding.btnSkinColorDetect);
         return binding.getRoot();
     }
 
