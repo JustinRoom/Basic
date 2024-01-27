@@ -65,7 +65,8 @@ public final class AESUtils {
     }
 
     private static Cipher createCipher(int opmode, String keyStr) {
-        String cipherAlgorithm = "AES/PKCS5Padding";//PKCS5Padding每次生成一样的密文，iso10126每次生成不一样的密文(Android不支持)
+        //PKCS5Padding每次生成一样的密文，iso10126每次生成不一样的密文(Android不支持)
+        String cipherAlgorithm = "AES/ECB/PKCS5Padding";
         try {
             //创建密码器
             Cipher cipher = Cipher.getInstance(cipherAlgorithm);

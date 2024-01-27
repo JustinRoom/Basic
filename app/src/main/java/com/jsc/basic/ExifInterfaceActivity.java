@@ -1,5 +1,6 @@
 package com.jsc.basic;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.exifinterface.media.ExifInterface;
@@ -64,8 +65,9 @@ public class ExifInterfaceActivity extends ABaseActivity {
         String timestamp = String.valueOf(System.currentTimeMillis());
         try {
             ExifInterface face = new ExifInterface(to);
+            String artist = AESUtils.encrypt("gxzzzzqjyksyA" + timestamp, "gxzzzzqjyksygzyj");
             //ExifInterface.TAG_IMAGE_UNIQUE_ID为可见属性，不可编辑，稳定
-            face.setAttribute(ExifInterface.TAG_ARTIST, AESUtils.encrypt("gxzzzzqjyksyA" + timestamp, "gxzzzzqjyksygzyj"));
+            face.setAttribute(ExifInterface.TAG_ARTIST, artist);
             //ExifInterface.TAG_BODY_SERIAL_NUMBER为隐藏属性，稳定
             face.setAttribute(ExifInterface.TAG_BODY_SERIAL_NUMBER, timestamp);
             face.saveAttributes();

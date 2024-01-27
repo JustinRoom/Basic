@@ -45,7 +45,7 @@ public class ExifAdapter extends RecyclerView.Adapter<ExifAdapter.EViewHolder> {
         holder.mBinding.tvPicName.setText(files.get(position).getName());
         try {
             ExifInterface face = new ExifInterface(files.get(position));
-            holder.mBinding.tvArtist.setText(String.format(Locale.US, "Artist:%s", face.getAttribute(ExifInterface.TAG_IMAGE_UNIQUE_ID)));
+            holder.mBinding.tvArtist.setText(String.format(Locale.US, "Artist:%s", face.getAttribute(ExifInterface.TAG_ARTIST)));
             holder.mBinding.tvBodySerialNumber.setText(String.format(Locale.US, "BodySerialNumber:%s", face.getAttribute(ExifInterface.TAG_BODY_SERIAL_NUMBER)));
         } catch (IOException e) {
             holder.mBinding.tvArtist.setText("");

@@ -40,7 +40,7 @@ public class SkinColorDetectActivity extends ABaseActivity {
             @Override
             public void run() {
                 list.clear();
-                File dir = LocalFileManager.getInstance().getExternalFilesDir("skin2");
+                File dir = LocalFileManager.getInstance().getExternalFilesDir("skin3");
                 File[] files = dir.listFiles(new FileFilter() {
                     @Override
                     public boolean accept(File pathname) {
